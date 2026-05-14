@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>We know when you here.</title>
+    <style>
+        :root {
+            --bg-color: #0b0b0e;
+            --accent-purple: #8b5cf6;
+            --text-gray: #9ca3af;
+            --card-bg: #16161d;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow-x: hidden;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(11, 11, 14, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-style: italic;
+            text-transform: uppercase;
+            color: var(--accent-purple);
+            font-size: 1.2rem;
+        }
+
+        nav { display: flex; gap: 15px; }
+        nav a { color: var(--text-gray); text-decoration: none; font-size: 13px; }
+
+        main {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .hero-title { text-align: center; }
+        .hero-title h1 { font-size: 2.2rem; margin: 0; text-transform: uppercase; }
+        .hero-title span { color: var(--accent-purple); }
+
+        /* 2D Вращающиеся контуры */
+        .cube-2d-container {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .smiley {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            z-index: 5;
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            object-fit: cover;
+        }
+
+        .square-outline {
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            border: 2px solid var(--accent-purple);
+            animation: rotate2d 7s linear infinite;
+            border-radius: 12px;
+        }
+
+        .square-outline.secondary {
+            width: 155px;
+            height: 155px;
+            border-color: rgba(139, 92, 246, 0.2);
+            animation: rotate2d 12s linear infinite reverse;
+            border-radius: 15px;
+        }
+
+        @keyframes rotate2d {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Карточка с картинкой из assets/ */
+        .message-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 15px;
+            width: 95%;
+            max-width: 450px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+        }
+
+        .card-label {
+            color: var(--text-gray);
+            font-size: 13px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .image-box {
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .nektar-img { width: 100%; height: auto; display: block; }
+
+        footer {
+            margin-top: auto;
+            padding: 15px;
+            text-align: center;
+            font-size: 11px;
+            color: #444;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">NEKT4R.INK</div>
+        <nav>
+            <a href="#">Changelog</a>
+            <a href="#">Guides</a>
+            <a href="#">Discord</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="hero-title">
+            <h1>Introducing<br><span>nekt4r.ink utility</span></h1>
+        </div>
+
+        <div class="cube-2d-container">
+            <div class="square-outline"></div>
+            <div class="square-outline secondary"></div>
+            <img src="assets/IMG_20260514_020558_919.jpg" class="smiley" alt="Core">
+        </div>
+
+        <div class="message-card">
+            <div class="card-label">Нужный человек который поддержит</div>
+            <div class="image-box">
+                <img src="assets/nektar.jpg" class="nektar-img" alt="Support Image">
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        NEKT4R.INK SYSTEM // BUILD 2026
+    </footer>
+
+</body>
+</html>
