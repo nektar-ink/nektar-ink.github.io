@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEKT4R.INK</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none !important;
+        }
+
+        body {
+            background: radial-gradient(circle at 50% -20%, #151030 0%, #050507 85%);
+            min-height: 100vh;
+            font-family: 'Inter', system-ui, sans-serif;
+            color: white;
+            padding: 20px;
+        }
+
+        /* --- CUSTOM CURSOR --- */
+        #c-dot {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+        }
+        #c-ring {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border: 2px solid #8b5cf6;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: all 0.12s ease-out;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+        }
+
+        /* --- HEADER --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo {
+            font-weight: 900;
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, #8b5cf6, #d946ef);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+        .version {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            background: #1a1a1a;
+            color: #555;
+            padding: 4px 10px;
+            border-radius: 30px;
+            border: 1px solid #2a2a2a;
+        }
+        .support-btn {
+            background: transparent;
+            border: 1.5px solid #8b5cf6;
+            color: #ddd;
+            padding: 8px 22px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: 0.25s;
+        }
+        .support-btn:hover {
+            background: rgba(139, 92, 246, 0.12);
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+            color: #fff;
+        }
+
+        /* --- CONTENT --- */
+        .app {
+            max-width: 700px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .visual-core {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .smiley {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            object-fit: cover;
+            animation: float 4s infinite ease-in-out;
+            z-index: 2;
+        }
+        .ring-bg {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border: 1px solid rgba(139, 92, 246, 0.15);
+            border-radius: 30%;
+            animation: spin 25s infinite linear;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .card {
+            width: 100%;
+            background: rgba(20, 20, 30, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 30px;
+            padding: 25px;
+            text-align: center;
+        }
+        .card-label {
+            font-size: 10px;
+            letter-spacing: 1px;
+            color: #888;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        .message-box {
+            background: rgba(40, 30, 60, 0.5);
+            border-radius: 16px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-align: left;
+            border: 1px solid rgba(139, 92, 246, 0.08);
+        }
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            flex-shrink: 0;
+        }
+        .msg-content {
+            display: flex;
+            flex-direction: column;
+        }
+        .msg-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+        .msg-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #ccc;
+        }
+        .msg-time {
+            font-size: 0.7rem;
+            color: #666;
+            font-family: monospace;
+        }
+        .msg-text {
+            font-size: 0.95rem;
+            color: #ddd;
+            line-height: 1.4;
+        }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(14px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-card {
+            background: rgba(20, 20, 30, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 48px;
+            padding: 40px;
+            max-width: 420px;
+            width: 100%;
+            border: 1px solid rgba(255,255,255,0.06);
+            text-align: center;
+        }
+        .modal-card h2 {
+            color: #eee;
+            font-weight: 400;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+        }
+        .modal-btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .modal-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 20px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            border: none;
+            transition: 0.2s;
+            color: #fff;
+            text-decoration: none;
+        }
+        .modal-btn.discord {
+            background: #5865F2;
+        }
+        .modal-btn.discord:hover {
+            background: #4752c4;
+            transform: scale(1.02);
+        }
+        .modal-btn.telegram {
+            background: #0088cc;
+        }
+        .modal-btn.telegram:hover {
+            background: #0077b3;
+            transform: scale(1.02);
+        }
+        .modal-close {
+            margin-top: 24px;
+            background: transparent;
+            border: 1px solid #444;
+            color: #999;
+            padding: 8px 28px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+        .modal-close:hover {
+            border-color: #8b5cf6;
+            color: #eee;
+        }
+
+        /* --- TOAST --- */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: #1a1a1a;
+            backdrop-filter: blur(10px);
+            padding: 14px 30px;
+            border-radius: 60px;
+            border: 1px solid #8b5cf6;
+            color: #ddd;
+            opacity: 0;
+            transition: 0.4s ease;
+            z-index: 99999;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media (max-width: 500px) {
+            .header { padding: 12px 18px; flex-wrap: wrap; gap: 10px; }
+            .logo { font-size: 1.2rem; }
+            .version { font-size: 0.7rem; padding: 2px 8px; }
+            .support-btn { padding: 6px 16px; font-size: 0.8rem; }
+            .message-box { flex-direction: column; align-items: flex-start; }
+            .avatar { width: 40px; height: 40px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CURSOR -->
+    <div id="c-dot"></div>
+    <div id="c-ring"></div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">📋 copied: not.good.morning</div>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-left">
+            <span class="logo">NEKT4R.INK</span>
+            <span class="version">v3.37</span>
+        </div>
+        <button class="support-btn" id="supportBtn">Support</button>
+    </header>
+
+    <!-- CONTENT -->
+    <main class="app">
+        <div class="visual-core">
+            <div class="ring-bg"></div>
+            <img src="assets/IMG_20260514_020558_919.jpg" class="smiley" alt="Core">
+        </div>
+
+        <div class="card">
+            <div class="card-label">Человек, который вас поддержит</div>
+            <div class="message-box">
+                <img src="assets/nektar.jpg" class="avatar" alt="Avatar">
+                <div class="msg-content">
+                    <div class="msg-header">
+                        <span class="msg-name">nekt4r_ink</span>
+                        <span class="msg-time">3:07 AM</span>
+                    </div>
+                    <div class="msg-text">сука я щас маме позвоню</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="supportModal">
+        <div class="modal-card">
+            <h2>✦ connect ✦</h2>
+            <div class="modal-btn-group">
+                <button class="modal-btn discord" id="discordBtn">
+                    <span>💬</span> Discord
+                </button>
+                <a href="https://t.me/sasibakas1" target="_blank" class="modal-btn telegram">
+                    <span>✈️</span> Telegram
+                </a>
+            </div>
+            <button class="modal-close" id="closeModalBtn">close</button>
+        </div>
+    </div>
+
+    <script>
+        // --- CURSOR ---
+        const dot = document.getElementById('c-dot');
+        const ring = document.getElementById('c-ring');
+        let mouseX = 0, mouseY = 0;
+        let ringX = 0, ringY = 0;
+        let ringActive = false;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            dot.style.left = mouseX + 'px';
+            dot.style.top = mouseY + 'px';
+            if (!ringActive) {
+                ring.style.left = mouseX + 'px';
+                ring.style.top = mouseY + 'px';
+                ringX = mouseX;
+                ringY = mouseY;
+                ringActive = true;
+            }
+            initAudio();
+        });
+
+        function animateRing() {
+            if (!ringActive) return;
+            const dx = mouseX - ringX;
+            const dy = mouseY - ringY;
+            ringX += dx * 0.12;
+            ringY += dy * 0.12;
+            ring.style.left = ringX + 'px';
+            ring.style.top = ringY + 'px';
+            requestAnimationFrame(animateRing);
+        }
+        animateRing();
+
+        document.addEventListener('mousedown', () => {
+            ring.style.width = '30px';
+            ring.style.height = '30px';
+            ring.style.borderColor = '#d946ef';
+        });
+        document.addEventListener('mouseup', () => {
+            ring.style.width = '40px';
+            ring.style.height = '40px';
+            ring.style.borderColor = '#8b5cf6';
+        });
+
+        // --- AUDIO ---
+        let audioInitialized = false;
+        let audioElement = null;
+
+        function initAudio() {
+            if (audioInitialized) return;
+            audioInitialized = true;
+            try {
+                audioElement = new Audio('https://stream.zeno.fm/0r0xa792kwzuv');
+                audioElement.loop = true;
+                audioElement.volume = 0.6;
+                audioElement.play().catch(() => {});
+            } catch (e) {}
+        }
+        document.addEventListener('click', initAudio);
+
+        // --- MODAL ---
+        const modal = document.getElementById('supportModal');
+        const supportBtn = document.getElementById('supportBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const discordBtn = document.getElementById('discordBtn');
+        const toast = document.getElementById('toast');
+
+        supportBtn.addEventListener('click', () => modal.classList.add('active'));
+        closeModalBtn.addEventListener('click', () => modal.classList.remove('active'));
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.classList.remove('active');
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') modal.classList.remove('active');
+        });
+
+        // --- DISCORD COPY ---
+        discordBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const tag = 'not.good.morning';
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(tag).then(() => showToast());
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = tag;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                showToast();
+            }
+        });
+
+        function showToast() {
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2400);
+        }
+
+        // --- PRELOAD IMAGES ---
+        ['assets/IMG_20260514_020558_919.jpg', 'assets/nektar.jpg'].forEach(src => {
+            const img = new Image();
+            img.src = src;
+        });
+    </script>
+</body>
+</html>
