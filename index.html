@@ -763,9 +763,7 @@
 
             // Установка статуса
             function setStatus(color) {
-                // Удаляем все классы цветов
                 statusCircle.className = 'status-circle';
-                // Добавляем нужный цвет
                 if (statusMap[color]) {
                     statusCircle.classList.add(statusMap[color].class);
                     statusCircle.dataset.color = color;
@@ -773,28 +771,28 @@
                 }
             }
 
-            // === ЗАГРУЗКА СТАТУСА ИЗ GITHUB ===
+            // === ЗАГРУЗКА СТАТУСА ИЗ GITHUB С АНТИКЕШЕМ ===
             const STATUS_URL = 'https://raw.githubusercontent.com/nektar-ink/nektar-ink/main/status.json';
 
             async function loadStatus() {
                 try {
-                    const response = await fetch(STATUS_URL);
+                    // Добавляем случайный параметр, чтобы GitHub не кешировал
+                    const response = await fetch(STATUS_URL + '?_=' + Date.now());
                     const data = await response.json();
                     if (data.status && statusMap[data.status]) {
                         setStatus(data.status);
-                        console.log(`✅ Статус загружен: ${data.status}`);
+                        console.log('✅ Статус загружен:', data.status);
                     } else {
                         console.warn('⚠️ Неверный статус в JSON, использую green');
                         setStatus('green');
                     }
                 } catch (e) {
                     console.error('❌ Ошибка загрузки статуса:', e);
-                    // По умолчанию зелёный
                     setStatus('green');
                 }
             }
 
-            // Загружаем статус при открытии страницы
+            // Загружаем при старте
             loadStatus();
 
             // Обновляем каждые 10 секунд
@@ -811,7 +809,6 @@
                 startAutoSlide();
             }
 
-            // Клик по кругу — открывает инструкцию
             statusCircle.addEventListener('click', (e) => {
                 e.stopPropagation();
                 openInstruction();
