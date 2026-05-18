@@ -25,6 +25,18 @@
             overflow-x: hidden;
         }
 
+        /* === BACKGROUND PRANK (1) — матричный дождь на фоне === */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.08;
+        }
+
         /* === CUSTOM CURSOR === */
         #c-dot {
             position: fixed;
@@ -148,6 +160,19 @@
             align-items: center;
             position: relative;
             z-index: 5;
+        }
+
+        /* === PRANK (2) — случайная фраза при загрузке === */
+        .random-phrase {
+            font-size: 0.8rem;
+            color: #555;
+            text-align: center;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .random-phrase span {
+            color: #4ade80;
         }
 
         /* === HERO SECTION === */
@@ -547,6 +572,9 @@
 </head>
 <body>
 
+    <!-- MATRIX BACKGROUND (1) -->
+    <canvas id="matrix-canvas"></canvas>
+
     <!-- CURSOR -->
     <div id="c-dot"></div>
     <div id="c-ring"></div>
@@ -571,6 +599,9 @@
 
     <!-- MAIN CONTENT -->
     <main class="app">
+        <!-- RANDOM PHRASE (2) -->
+        <div class="random-phrase" id="randomPhrase">✦ <span>загрузка</span> ...</div>
+
         <!-- HERO SECTION -->
         <section class="hero">
             <div class="hero-left">
@@ -691,6 +722,63 @@
 
     <script>
         (function() {
+            // === MATRIX BACKGROUND (1) ===
+            const canvas = document.getElementById('matrix-canvas');
+            const ctx = canvas.getContext('2d');
+            let w, h;
+
+            function resizeCanvas() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            const symbols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}:<>?';
+            const columns = Math.floor(w / 20);
+            const drops = [];
+            for (let i = 0; i < columns; i++) {
+                drops[i] = Math.floor(Math.random() * h / 20);
+            }
+
+            function drawMatrix() {
+                ctx.fillStyle = 'rgba(10, 10, 10, 0.05)';
+                ctx.fillRect(0, 0, w, h);
+                ctx.fillStyle = '#4ade80';
+                ctx.font = '16px monospace';
+                for (let i = 0; i < columns; i++) {
+                    const char = symbols[Math.floor(Math.random() * symbols.length)];
+                    ctx.fillText(char, i * 20, drops[i] * 20);
+                    if (drops[i] * 20 > h && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+                requestAnimationFrame(drawMatrix);
+            }
+            drawMatrix();
+
+            // === RANDOM PHRASE (2) ===
+            const phrases = [
+                "ты здесь",
+                "погнали",
+                "ой всё",
+                "не спи",
+                "семь пятниц",
+                "ждун",
+                "спокойной ночи",
+                "доброе утро",
+                "work hard, play hard",
+                "минута тишины",
+                "поехали",
+                "на связи",
+                "держи в курсе",
+                "всё будет норм",
+                "не дрейфь"
+            ];
+            const phraseEl = document.getElementById('randomPhrase');
+            phraseEl.innerHTML = '✦ <span>' + phrases[Math.floor(Math.random() * phrases.length)] + '</span>';
+
             // === CURSOR ===
             const dot = document.getElementById('c-dot');
             const ring = document.getElementById('c-ring');
