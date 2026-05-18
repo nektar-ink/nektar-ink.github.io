@@ -14,17 +14,18 @@
         }
 
         body {
-            background: radial-gradient(circle at 50% -20%, #151030 0%, #050507 85%);
+            background: #0a0a0a;
             min-height: 100vh;
             font-family: 'Inter', system-ui, sans-serif;
             color: white;
-            padding: 20px;
+            padding: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            overflow-x: hidden;
         }
 
-        /* === CUSTOM CURSOR === */
+        /* === CUSTOM CURSOR — исправлен === */
         #c-dot {
             position: fixed;
             width: 6px;
@@ -32,56 +33,28 @@
             background: white;
             border-radius: 50%;
             pointer-events: none;
-            z-index: 9999;
+            z-index: 999999;
             transform: translate(-50%, -50%);
+            transition: width 0.1s, height 0.1s;
         }
         #c-ring {
             position: fixed;
             width: 30px;
             height: 30px;
-            border: 1.5px solid #8b5cf6;
+            border: 1.5px solid #4ade80;
             border-radius: 50%;
             pointer-events: none;
-            z-index: 9998;
+            z-index: 999998;
             transform: translate(-50%, -50%);
             transition: all 0.15s ease-out;
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.15);
+            will-change: transform;
         }
         #c-ring.hover {
             width: 50px;
             height: 50px;
-            border-color: #d946ef;
-            box-shadow: 0 0 40px rgba(217, 70, 239, 0.3);
-        }
-
-        /* === FLOATING LETTERS === */
-        #float-letters {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-            overflow: hidden;
-        }
-        .float-letter {
-            position: absolute;
-            font-weight: 900;
-            font-size: 3rem;
-            background: linear-gradient(135deg, #8b5cf6, #d946ef);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            opacity: 0.06;
-            animation: drift linear infinite;
-            pointer-events: none;
-        }
-        @keyframes drift {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(30px, -20px) rotate(5deg); }
-            50% { transform: translate(-20px, 30px) rotate(-3deg); }
-            75% { transform: translate(15px, -15px) rotate(4deg); }
-            100% { transform: translate(0, 0) rotate(0deg); }
+            border-color: #4ade80;
+            box-shadow: 0 0 40px rgba(74, 222, 128, 0.3);
         }
 
         /* === HEADER === */
@@ -89,13 +62,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 30px;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            max-width: 700px;
-            margin: 0 auto 30px;
+            padding: 20px 40px;
+            width: 100%;
+            max-width: 1280px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
             position: relative;
             z-index: 10;
         }
@@ -104,50 +74,75 @@
             align-items: center;
             gap: 12px;
         }
+        .logo-dot {
+            width: 8px;
+            height: 8px;
+            background: #4ade80;
+            border-radius: 50%;
+            display: inline-block;
+        }
         .logo {
-            font-weight: 900;
-            font-size: 1.6rem;
-            background: linear-gradient(135deg, #8b5cf6, #d946ef);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            font-size: 1.1rem;
             letter-spacing: -0.5px;
+            color: white;
         }
         .version {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
+            font-size: 0.7rem;
             background: #1a1a1a;
             color: #555;
-            padding: 4px 10px;
+            padding: 2px 8px;
             border-radius: 30px;
             border: 1px solid #2a2a2a;
+            margin-left: 8px;
         }
-        .support-btn {
-            background: transparent;
-            border: 1.5px solid #8b5cf6;
-            color: #ddd;
-            padding: 8px 22px;
-            border-radius: 40px;
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            list-style: none;
+            font-size: 0.7rem;
             font-weight: 500;
-            font-size: 0.9rem;
-            transition: 0.25s;
-            position: relative;
-            z-index: 20;
-            animation: pulse-btn 2s ease-in-out infinite;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
-        .support-btn:hover {
-            background: rgba(139, 92, 246, 0.12);
-            box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
-            color: #fff;
+        .nav-links a {
+            color: #888;
+            text-decoration: none;
+            transition: 0.2s;
         }
-        @keyframes pulse-btn {
-            0%, 100% { box-shadow: 0 0 0 rgba(139, 92, 246, 0); }
-            50% { box-shadow: 0 0 25px rgba(139, 92, 246, 0.2); }
+        .nav-links a:hover {
+            color: #4ade80;
+        }
+        .header-btn {
+            background: #4ade80;
+            color: #0a0a0a;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.7rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        .header-btn:hover {
+            background: #3bce6e;
+            transform: scale(1.02);
         }
 
         /* === MAIN CONTENT === */
         .app {
-            max-width: 700px;
-            margin: 0 auto;
+            width: 100%;
+            max-width: 1280px;
+            padding: 60px 40px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -155,69 +150,198 @@
             z-index: 5;
         }
 
-        .visual-core {
-            position: relative;
-            width: 200px;
-            height: 200px;
+        /* === HERO SECTION === */
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 60px;
+            gap: 40px;
+        }
+        .hero-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .hero-tag {
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            color: #4ade80;
+            text-transform: uppercase;
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            padding: 4px 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+        .hero-title .highlight {
+            color: #4ade80;
+        }
+        .hero-desc {
+            font-size: 1rem;
+            color: #888;
+            max-width: 500px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+        }
+        .hero-btn {
+            padding: 10px 28px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        .hero-btn.primary {
+            background: #4ade80;
+            color: #0a0a0a;
+        }
+        .hero-btn.primary:hover {
+            background: #3bce6e;
+        }
+        .hero-btn.secondary {
+            background: transparent;
+            color: #888;
+            border: 1px solid #333;
+        }
+        .hero-btn.secondary:hover {
+            border-color: #4ade80;
+            color: #4ade80;
+        }
+        .hero-right {
+            flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 30px;
         }
-        .smiley {
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
+        .hero-image {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 12px;
             object-fit: cover;
-            animation: float 4s infinite ease-in-out;
-            z-index: 2;
-            position: relative;
         }
-        .smiley-tooltip {
+
+        /* === STATUS SECTION === */
+        .status-section {
+            width: 100%;
+            margin-bottom: 60px;
+            padding: 40px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+        }
+        .status-left {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .status-label {
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            color: #4ade80;
+            text-transform: uppercase;
+        }
+        .status-circle-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .status-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+            position: relative;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.1);
+        }
+        .status-circle.green { background: #4ade80; }
+        .status-circle.yellow { background: #ffcc00; }
+        .status-circle.red { background: #ff4444; }
+        .status-circle.gray { background: #888888; }
+        .status-circle.black { background: #1a1a1a; border-color: #444; }
+        .status-circle:hover {
+            transform: scale(1.05);
+            border-color: #4ade80;
+            box-shadow: 0 0 40px rgba(74, 222, 128, 0.3);
+        }
+        .status-circle.active {
+            border-color: #4ade80;
+            box-shadow: 0 0 30px rgba(74, 222, 128, 0.4);
+        }
+        .status-circle .tooltip-text {
             position: absolute;
-            bottom: -30px;
+            bottom: -35px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
-            padding: 6px 16px;
-            border-radius: 20px;
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            font-size: 0.8rem;
-            color: #ccc;
+            font-size: 0.7rem;
+            color: #888;
             white-space: nowrap;
             opacity: 0;
             transition: 0.3s;
             pointer-events: none;
-            z-index: 10;
         }
-        .smiley:hover .smiley-tooltip {
+        .status-circle:hover .tooltip-text {
             opacity: 1;
         }
-        .ring-bg {
-            position: absolute;
-            width: 180px;
-            height: 180px;
-            border: 1px solid rgba(139, 92, 246, 0.15);
-            border-radius: 30%;
-            animation: spin 25s infinite linear;
+        .status-text {
+            font-size: 0.9rem;
+            color: #888;
         }
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        .status-text span {
+            font-weight: 600;
+            color: white;
         }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
+        .status-right {
+            display: flex;
+            gap: 30px;
+        }
+        .status-stat {
+            text-align: center;
+        }
+        .status-stat .number {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+        }
+        .status-stat .label {
+            font-size: 0.6rem;
+            color: #555;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
+        /* === CARD SECTION === */
+        .card-section {
+            width: 100%;
+            margin-bottom: 60px;
+        }
         .card {
             width: 100%;
-            background: rgba(20, 20, 30, 0.4);
-            backdrop-filter: blur(12px);
+            background: #111;
             border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 30px;
-            padding: 25px;
+            border-radius: 12px;
+            padding: 30px;
             text-align: center;
             transition: box-shadow 0.3s;
         }
@@ -225,9 +349,9 @@
             animation: cardFlash 0.6s ease;
         }
         @keyframes cardFlash {
-            0% { box-shadow: 0 0 0 rgba(139, 92, 246, 0); }
-            30% { box-shadow: 0 0 80px rgba(139, 92, 246, 0.4), inset 0 0 40px rgba(139, 92, 246, 0.1); }
-            100% { box-shadow: 0 0 0 rgba(139, 92, 246, 0); }
+            0% { box-shadow: 0 0 0 rgba(74, 222, 128, 0); }
+            30% { box-shadow: 0 0 80px rgba(74, 222, 128, 0.4), inset 0 0 40px rgba(74, 222, 128, 0.1); }
+            100% { box-shadow: 0 0 0 rgba(74, 222, 128, 0); }
         }
         .card-header {
             display: flex;
@@ -237,25 +361,22 @@
             padding: 0 5px;
         }
         .card-label {
-            font-size: 10px;
-            letter-spacing: 1px;
-            color: #888;
-            margin-bottom: 20px;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            color: #4ade80;
             text-transform: uppercase;
         }
-
-        /* Photo slider */
         .photo-slider {
             position: relative;
             width: 100%;
             overflow: hidden;
-            border-radius: 16px;
+            border-radius: 12px;
         }
         .photo-slider img {
             width: 100%;
             display: block;
             object-fit: cover;
-            border: 1px solid rgba(139, 92, 246, 0.08);
+            border: 1px solid rgba(255,255,255,0.05);
             transition: opacity 0.4s ease;
             opacity: 0;
             position: absolute;
@@ -281,76 +402,19 @@
             transition: 0.3s;
         }
         .photo-dot.active {
-            background: #8b5cf6;
-            border-color: #8b5cf6;
-            box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+            background: #4ade80;
+            border-color: #4ade80;
+            box-shadow: 0 0 15px rgba(74, 222, 128, 0.3);
         }
         .photo-dot:hover {
-            background: #8b5cf6;
+            background: #4ade80;
         }
 
-        /* === SINGLE STATUS CIRCLE === */
-        .status-container {
-            display: flex;
-            justify-content: center;
-            margin: 15px 0 10px;
-        }
-        .status-circle {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 2px solid rgba(255,255,255,0.1);
-            transition: all 0.3s;
-            position: relative;
-            cursor: pointer;
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.1);
-        }
-        .status-circle.green { background: #00ff88; }
-        .status-circle.yellow { background: #ffcc00; }
-        .status-circle.red { background: #ff4444; }
-        .status-circle.gray { background: #888888; }
-        .status-circle.black { background: #1a1a1a; border-color: #444; }
-        .status-circle:hover {
-            transform: scale(1.1);
-            border-color: #8b5cf6;
-            box-shadow: 0 0 40px rgba(139, 92, 246, 0.4);
-        }
-        .status-circle .tooltip-text {
-            position: absolute;
-            bottom: -35px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.7rem;
-            color: #888;
-            white-space: nowrap;
-            opacity: 0;
-            transition: 0.3s;
-            pointer-events: none;
-        }
-        .status-circle:hover .tooltip-text {
-            opacity: 1;
-        }
-        .status-circle.active {
-            border-color: #8b5cf6;
-            box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
-        }
-
-        /* Статус-текст */
-        .status-text {
-            font-size: 0.9rem;
-            color: #999;
-            text-align: center;
-            margin-top: 5px;
-        }
-        .status-text span {
-            font-weight: 600;
-        }
-
-        /* === MODAL INSTRUCTION (инструкция по цветам) === */
+        /* === MODAL INSTRUCTION === */
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(14px);
             display: none;
             justify-content: center;
@@ -362,13 +426,12 @@
             display: flex;
         }
         .modal-card {
-            background: rgba(20, 20, 30, 0.7);
-            backdrop-filter: blur(20px);
-            border-radius: 48px;
+            background: #111;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
             padding: 40px;
             max-width: 420px;
             width: 100%;
-            border: 1px solid rgba(255,255,255,0.06);
             text-align: center;
         }
         .modal-card h2 {
@@ -387,7 +450,7 @@
             align-items: center;
             gap: 14px;
             padding: 8px 12px;
-            border-radius: 12px;
+            border-radius: 8px;
             margin-bottom: 6px;
             transition: 0.2s;
         }
@@ -401,7 +464,7 @@
             border: 1px solid rgba(255,255,255,0.1);
             flex-shrink: 0;
         }
-        .modal-card .color-dot.green { background: #00ff88; }
+        .modal-card .color-dot.green { background: #4ade80; }
         .modal-card .color-dot.yellow { background: #ffcc00; }
         .modal-card .color-dot.red { background: #ff4444; }
         .modal-card .color-dot.gray { background: #888888; }
@@ -426,7 +489,7 @@
             transition: 0.2s;
         }
         .modal-close:hover {
-            border-color: #8b5cf6;
+            border-color: #4ade80;
             color: #eee;
         }
 
@@ -440,7 +503,7 @@
             backdrop-filter: blur(10px);
             padding: 14px 30px;
             border-radius: 60px;
-            border: 1px solid #8b5cf6;
+            border: 1px solid #4ade80;
             color: #ddd;
             opacity: 0;
             transition: 0.4s ease;
@@ -451,22 +514,66 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        @media (max-width: 500px) {
-            .header { padding: 12px 18px; flex-wrap: wrap; gap: 10px; }
-            .logo { font-size: 1.2rem; }
-            .version { font-size: 0.7rem; padding: 2px 8px; }
-            .support-btn { padding: 6px 16px; font-size: 0.8rem; }
-            .title-text { font-size: 1.2rem; }
-            .float-letter { font-size: 2rem; }
-            .photo-dot { width: 8px; height: 8px; }
-            .status-circle { width: 50px; height: 50px; }
+        /* === FOOTER === */
+        .footer {
+            width: 100%;
+            max-width: 1280px;
+            padding: 30px 40px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            font-size: 0.6rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #555;
+        }
+        .footer-left .dot {
+            width: 6px;
+            height: 6px;
+            background: #4ade80;
+            border-radius: 50%;
+        }
+        .footer-left .name {
+            color: white;
+            font-weight: 500;
+        }
+        .footer-right {
+            display: flex;
+            gap: 20px;
+            color: #555;
+        }
+        .footer-right a {
+            color: #555;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .footer-right a:hover {
+            color: #4ade80;
+        }
+
+        @media (max-width: 768px) {
+            .header { padding: 15px 20px; flex-wrap: wrap; gap: 10px; }
+            .header-right { gap: 12px; }
+            .nav-links { display: none; }
+            .app { padding: 30px 20px; }
+            .hero { flex-direction: column; align-items: flex-start; }
+            .hero-title { font-size: 2.5rem; }
+            .hero-right { width: 100%; }
+            .status-section { flex-direction: column; align-items: flex-start; }
+            .status-right { flex-wrap: wrap; }
+            .footer { flex-direction: column; align-items: flex-start; gap: 10px; }
         }
     </style>
 </head>
 <body>
-
-    <!-- FLOATING LETTERS -->
-    <div id="float-letters"></div>
 
     <!-- CURSOR -->
     <div id="c-dot"></div>
@@ -478,56 +585,87 @@
     <!-- HEADER -->
     <header class="header">
         <div class="header-left">
+            <span class="logo-dot"></span>
             <span class="logo">NEKT4R.INK</span>
             <span class="version">v3.37</span>
         </div>
-        <button class="support-btn" id="supportBtn">Support</button>
+        <div class="header-right">
+            <ul class="nav-links">
+                <li><a href="#">CONTACT</a></li>
+            </ul>
+            <button class="header-btn" id="supportBtn">GET HACKER KIT</button>
+        </div>
     </header>
 
-    <!-- CONTENT -->
-    <div class="app">
-        <div class="visual-core">
-            <div class="ring-bg"></div>
-            <div class="smiley">
-                <img src="assets/IMG_20260514_020558_919.jpg" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" alt="Core">
-                <div class="smiley-tooltip" id="tooltip">ты здесь</div>
+    <!-- MAIN CONTENT -->
+    <main class="app">
+        <!-- HERO SECTION -->
+        <section class="hero">
+            <div class="hero-left">
+                <div class="hero-tag">✦ состояние нектара</div>
+                <h1 class="hero-title">
+                    Этот сайт показывает<br>
+                    состояние <span class="highlight">нектара</span>.
+                </h1>
+                <p class="hero-desc">
+                    Выбери настроение и смотри, как меняется состояние. 
+                    Каждый цвет — это эмоция, каждое состояние — история.
+                </p>
+                <div class="hero-buttons">
+                    <button class="hero-btn primary" id="scrollToStatus">СМОТРЕТЬ СОСТОЯНИЕ</button>
+                </div>
             </div>
-        </div>
+            <div class="hero-right">
+                <img src="assets/IMG_20260514_020558_919.jpg" class="hero-image" alt="Nektar">
+            </div>
+        </section>
 
-        <!-- SINGLE STATUS CIRCLE -->
-        <div class="status-container">
-            <div class="status-circle green active" id="statusCircle" data-color="green">
-                <span class="tooltip-text">нажми для инструкции</span>
+        <!-- STATUS SECTION -->
+        <section class="status-section" id="statusSection">
+            <div class="status-left">
+                <div class="status-label">✦ текущее состояние</div>
+                <div class="status-circle-wrapper">
+                    <div class="status-circle green active" id="statusCircle" data-color="green">
+                        <span class="tooltip-text">нажми для инструкции</span>
+                    </div>
+                    <div class="status-text">Текущее состояние: <span id="statusLabel">в порядке</span></div>
+                </div>
             </div>
-        </div>
-        <div class="status-text">Текущее состояние: <span id="statusLabel">загрузка...</span></div>
+            <div class="status-right">
+                <div class="status-stat">
+                    <div class="number">1,000+</div>
+                    <div class="label">посетителей</div>
+                </div>
+                <div class="status-stat">
+                    <div class="number">24/7</div>
+                    <div class="label">на связи</div>
+                </div>
+                <div class="status-stat">
+                    <div class="number">∞</div>
+                    <div class="label">возможностей</div>
+                </div>
+            </div>
+        </section>
 
-        <!-- TYPING TITLE -->
-        <div class="title-container">
-            <span class="title-text" id="typedTitle"></span>
-            <span class="cursor-blink" id="cursorBlink"></span>
-        </div>
-
-        <div class="card" id="card">
-            <div class="card-header">
-                <span class="card-label">Человек, который вас поддержит</span>
+        <!-- CARD SECTION -->
+        <section class="card-section">
+            <div class="card" id="card">
+                <div class="card-header">
+                    <span class="card-label">✦ человек, который вас поддержит</span>
+                </div>
+                <div class="photo-slider" id="photoSlider">
+                    <img src="assets/nektar.jpg" class="active" data-index="0" alt="Agent 1">
+                    <img src="assets/fuck.jpg" data-index="1" alt="Agent 2">
+                    <img src="assets/aboba.jpg" data-index="2" alt="Agent 3">
+                </div>
+                <div class="photo-dots" id="photoDots">
+                    <span class="photo-dot active" data-index="0"></span>
+                    <span class="photo-dot" data-index="1"></span>
+                    <span class="photo-dot" data-index="2"></span>
+                </div>
             </div>
-            
-            <!-- PHOTO SLIDER -->
-            <div class="photo-slider" id="photoSlider">
-                <img src="assets/nektar.jpg" class="active" data-index="0" alt="Agent 1">
-                <img src="assets/fuck.jpg" data-index="1" alt="Agent 2">
-                <img src="assets/aboba.jpg" data-index="2" alt="Agent 3">
-            </div>
-            
-            <!-- DOTS -->
-            <div class="photo-dots" id="photoDots">
-                <span class="photo-dot active" data-index="0"></span>
-                <span class="photo-dot" data-index="1"></span>
-                <span class="photo-dot" data-index="2"></span>
-            </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <!-- MODAL INSTRUCTION -->
     <div class="modal-overlay" id="instructionModal">
@@ -580,45 +718,47 @@
         </div>
     </div>
 
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-left">
+            <span class="dot"></span>
+            <span class="name">NEKT4R.INK</span>
+            <span>• 2026 • educational hacking only • DE</span>
+        </div>
+        <div class="footer-right">
+            <a href="#">DISCORD</a>
+            <a href="#">CONTACT</a>
+        </div>
+    </footer>
+
     <script>
         (function() {
-            // === FLOATING LETTERS ===
-            const lettersContainer = document.getElementById('float-letters');
-            const letters = ['N', 'E', 'K', 'T', '4', 'R'];
-            letters.forEach((letter, index) => {
-                const el = document.createElement('div');
-                el.className = 'float-letter';
-                el.textContent = letter;
-                el.style.left = (10 + Math.random() * 80) + '%';
-                el.style.top = (10 + Math.random() * 80) + '%';
-                el.style.fontSize = (2 + Math.random() * 3) + 'rem';
-                el.style.animationDuration = (20 + Math.random() * 20) + 's';
-                el.style.animationDelay = (index * 2 + Math.random() * 3) + 's';
-                el.style.opacity = 0.04 + Math.random() * 0.04;
-                lettersContainer.appendChild(el);
-            });
-
-            // === CURSOR ===
+            // === CURSOR (исправлен) ===
             const dot = document.getElementById('c-dot');
             const ring = document.getElementById('c-ring');
             let mouseX = -100, mouseY = -100;
             let ringX = -100, ringY = -100;
             let ringActive = false;
 
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-                dot.style.left = mouseX + 'px';
-                dot.style.top = mouseY + 'px';
+            function updateCursor(e) {
+                const x = e.clientX || e.touches?.[0]?.clientX || 0;
+                const y = e.clientY || e.touches?.[0]?.clientY || 0;
+                mouseX = x;
+                mouseY = y;
+                dot.style.left = x + 'px';
+                dot.style.top = y + 'px';
                 if (!ringActive) {
-                    ring.style.left = mouseX + 'px';
-                    ring.style.top = mouseY + 'px';
-                    ringX = mouseX;
-                    ringY = mouseY;
+                    ring.style.left = x + 'px';
+                    ring.style.top = y + 'px';
+                    ringX = x;
+                    ringY = y;
                     ringActive = true;
                 }
                 initAudio();
-            });
+            }
+
+            document.addEventListener('mousemove', updateCursor);
+            document.addEventListener('touchmove', updateCursor, { passive: true });
 
             function animateRing() {
                 if (!ringActive) return;
@@ -632,7 +772,7 @@
             }
             animateRing();
 
-            document.querySelectorAll('.support-btn, .modal-btn, .modal-close, .logo, .smiley, .photo-dot, .status-circle').forEach(el => {
+            document.querySelectorAll('.header-btn, .hero-btn, .modal-btn, .modal-close, .logo, .status-circle, .photo-dot').forEach(el => {
                 el.addEventListener('mouseenter', () => ring.classList.add('hover'));
                 el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
             });
@@ -653,22 +793,10 @@
             }
             document.addEventListener('click', initAudio);
 
-            // === TOOLTIP JOKES ===
-            const tooltip = document.getElementById('tooltip');
-            const jokes = [
-                "ты здесь",
-                "погнали",
-                "ой всё",
-                "не спи",
-                "семь пятниц",
-                "ждун",
-                "спокойной ночи",
-                "доброе утро",
-                "work hard, play hard",
-                "минута тишины",
-                "поехали"
-            ];
-            tooltip.textContent = jokes[Math.floor(Math.random() * jokes.length)];
+            // === SCROLL TO STATUS ===
+            document.getElementById('scrollToStatus').addEventListener('click', () => {
+                document.getElementById('statusSection').scrollIntoView({ behavior: 'smooth' });
+            });
 
             // === CARD FLASH ===
             const card = document.getElementById('card');
@@ -730,23 +858,6 @@
 
             startAutoSlide();
 
-            // === TYPING EFFECT ===
-            const titleEl = document.getElementById('typedTitle');
-            const cursorBlink = document.getElementById('cursorBlink');
-            const fullText = 'Этот сайт показывает состояние <span class="purple">нектара</span>.';
-            let charIndex = 0;
-
-            function typeText() {
-                if (charIndex <= fullText.length) {
-                    titleEl.innerHTML = fullText.substring(0, charIndex);
-                    charIndex++;
-                    setTimeout(typeText, 50 + Math.random() * 30);
-                } else {
-                    cursorBlink.style.animation = 'blink 1s step-end infinite';
-                }
-            }
-            setTimeout(typeText, 300);
-
             // === STATUS CIRCLE ===
             const statusCircle = document.getElementById('statusCircle');
             const statusLabel = document.getElementById('statusLabel');
@@ -770,38 +881,30 @@
                 }
             }
 
-            // === ЗАГРУЗКА СТАТУСА (без кеша) ===
+            // === ЗАГРУЗКА СТАТУСА ===
             const STATUS_URL = 'https://raw.githubusercontent.com/nektar-ink/nektar-ink.github.io/main/status.json';
 
             async function loadStatus() {
-    try {
-        // Используем timestamp + случайное число для полного обхода кеша
-        const timestamp = Date.now();
-        const random = Math.random();
-        const url = `https://raw.githubusercontent.com/nektar-ink/nektar-ink.github.io/main/status.json?t=${timestamp}&r=${random}`;
-        
-        const response = await fetch(url);
-        const data = await response.json();
-        console.log('✅ Статус загружен:', data.status);
-        if (data.status && statusMap[data.status]) {
-            setStatus(data.status);
-        } else {
-            console.warn('⚠️ Неверный статус, использую green');
-            setStatus('green');
-        }
-    } catch (e) {
-        console.error('❌ Ошибка загрузки статуса:', e);
-        setStatus('green');
-    }
-}
+                try {
+                    const response = await fetch(STATUS_URL + '?_=' + Date.now());
+                    const data = await response.json();
+                    console.log('✅ Статус загружен:', data.status);
+                    if (data.status && statusMap[data.status]) {
+                        setStatus(data.status);
+                    } else {
+                        console.warn('⚠️ Неверный статус, использую green');
+                        setStatus('green');
+                    }
+                } catch (e) {
+                    console.error('❌ Ошибка загрузки статуса:', e);
+                    setStatus('green');
+                }
+            }
 
-            // Загружаем при старте
             loadStatus();
+            setInterval(loadStatus, 10000);
 
-            // Обновляем каждые 5 секунд
-            setInterval(loadStatus, 5000);
-
-            // === ОТКРЫТИЕ ИНСТРУКЦИИ ===
+            // === ИНСТРУКЦИЯ ===
             function openInstruction() {
                 instructionModal.classList.add('active');
                 stopAutoSlide();
@@ -871,6 +974,9 @@
                 const img = new Image();
                 img.src = src;
             });
+
+            // Фоновая музыка при клике
+            document.addEventListener('click', initAudio);
 
         })();
     </script>
