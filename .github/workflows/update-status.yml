@@ -1,0 +1,31 @@
+name: Update Status
+
+on:
+  workflow_dispatch:
+    inputs:
+      status:
+        description: 'New status'
+        required: true
+        type: choice
+        options:
+          - green
+          - yellow
+          - red
+          - gray
+          - black
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Update status.json
+        run: |
+          echo '{"status":"${{ github.event.inputs.status }}","lastUpdate":"'$(date -Iseconds)'"}' > status.json
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add status.json
+          git commit -m "Update status to ${{ github.event.inputs.status }}"
+          git push
