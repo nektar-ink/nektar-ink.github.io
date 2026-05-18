@@ -580,7 +580,6 @@
         </div>
     </div>
 
-    <script src="config.js"></script>
     <script>
         (function() {
             // === FLOATING LETTERS ===
@@ -748,7 +747,7 @@
             }
             setTimeout(typeText, 300);
 
-            // === SINGLE STATUS CIRCLE ===
+            // === STATUS CIRCLE ===
             const statusCircle = document.getElementById('statusCircle');
             const statusLabel = document.getElementById('statusLabel');
             const instructionModal = document.getElementById('instructionModal');
@@ -774,17 +773,34 @@
                 }
             }
 
-            // Чтение конфига из config.js
-            function loadConfig() {
-                if (typeof CONFIG !== 'undefined' && CONFIG.status) {
-                    setStatus(CONFIG.status);
-                } else {
-                    // По умолчанию зеленый
+            // === ЗАГРУЗКА СТАТУСА ИЗ GITHUB ===
+            const STATUS_URL = 'https://raw.githubusercontent.com/nektar-ink/nektar-ink/main/status.json';
+
+            async function loadStatus() {
+                try {
+                    const response = await fetch(STATUS_URL);
+                    const data = await response.json();
+                    if (data.status && statusMap[data.status]) {
+                        setStatus(data.status);
+                        console.log(`✅ Статус загружен: ${data.status}`);
+                    } else {
+                        console.warn('⚠️ Неверный статус в JSON, использую green');
+                        setStatus('green');
+                    }
+                } catch (e) {
+                    console.error('❌ Ошибка загрузки статуса:', e);
+                    // По умолчанию зелёный
                     setStatus('green');
                 }
             }
 
-            // Открытие инструкции
+            // Загружаем статус при открытии страницы
+            loadStatus();
+
+            // Обновляем каждые 10 секунд
+            setInterval(loadStatus, 10000);
+
+            // === ОТКРЫТИЕ ИНСТРУКЦИИ ===
             function openInstruction() {
                 instructionModal.classList.add('active');
                 stopAutoSlide();
@@ -810,9 +826,6 @@
                     closeInstruction();
                 }
             });
-
-            // Загружаем конфиг
-            loadConfig();
 
             // === SUPPORT MODAL ===
             const supportModal = document.getElementById('supportModal');
