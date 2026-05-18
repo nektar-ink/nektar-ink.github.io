@@ -774,22 +774,26 @@
             const STATUS_URL = 'https://raw.githubusercontent.com/nektar-ink/nektar-ink.github.io/main/status.json';
 
             async function loadStatus() {
-                try {
-                    // Добавляем случайный параметр, чтобы обойти кеш GitHub
-                    const response = await fetch(STATUS_URL + '?_=' + Date.now());
-                    const data = await response.json();
-                    console.log('✅ Статус загружен:', data.status);
-                    if (data.status && statusMap[data.status]) {
-                        setStatus(data.status);
-                    } else {
-                        console.warn('⚠️ Неверный статус, использую green');
-                        setStatus('green');
-                    }
-                } catch (e) {
-                    console.error('❌ Ошибка загрузки статуса:', e);
-                    setStatus('green');
-                }
-            }
+    try {
+        // Используем timestamp + случайное число для полного обхода кеша
+        const timestamp = Date.now();
+        const random = Math.random();
+        const url = `https://raw.githubusercontent.com/nektar-ink/nektar-ink.github.io/main/status.json?t=${timestamp}&r=${random}`;
+        
+        const response = await fetch(url);
+        const data = await response.json();
+        console.log('✅ Статус загружен:', data.status);
+        if (data.status && statusMap[data.status]) {
+            setStatus(data.status);
+        } else {
+            console.warn('⚠️ Неверный статус, использую green');
+            setStatus('green');
+        }
+    } catch (e) {
+        console.error('❌ Ошибка загрузки статуса:', e);
+        setStatus('green');
+    }
+}
 
             // Загружаем при старте
             loadStatus();
