@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NEKT4R.INK</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
     <style>
         * {
             margin: 0;
@@ -23,7 +24,7 @@
             align-items: center;
         }
 
-        /* === CUSTOM CURSOR (опционально) === */
+        /* === CUSTOM CURSOR === */
         #c-dot {
             position: fixed;
             width: 6px;
@@ -46,6 +47,42 @@
             transition: all 0.15s ease-out;
             box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
         }
+        #c-ring.hover {
+            width: 50px;
+            height: 50px;
+            border-color: #d946ef;
+            box-shadow: 0 0 40px rgba(217, 70, 239, 0.3);
+        }
+
+        /* === FLOATING LETTERS === */
+        #float-letters {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .float-letter {
+            position: absolute;
+            font-weight: 900;
+            font-size: 3rem;
+            background: linear-gradient(135deg, #8b5cf6, #d946ef);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0.06;
+            animation: drift linear infinite;
+            pointer-events: none;
+        }
+        @keyframes drift {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(30px, -20px) rotate(5deg); }
+            50% { transform: translate(-20px, 30px) rotate(-3deg); }
+            75% { transform: translate(15px, -15px) rotate(4deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
 
         /* === HEADER === */
         .header {
@@ -59,6 +96,8 @@
             border: 1px solid rgba(255, 255, 255, 0.06);
             max-width: 700px;
             margin: 0 auto 30px;
+            position: relative;
+            z-index: 10;
         }
         .header-left {
             display: flex;
@@ -91,11 +130,18 @@
             font-weight: 500;
             font-size: 0.9rem;
             transition: 0.25s;
+            position: relative;
+            z-index: 20;
+            animation: pulse-btn 2s ease-in-out infinite;
         }
         .support-btn:hover {
             background: rgba(139, 92, 246, 0.12);
             box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
             color: #fff;
+        }
+        @keyframes pulse-btn {
+            0%, 100% { box-shadow: 0 0 0 rgba(139, 92, 246, 0); }
+            50% { box-shadow: 0 0 25px rgba(139, 92, 246, 0.2); }
         }
 
         /* === MAIN CONTENT === */
@@ -105,6 +151,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
+            z-index: 5;
         }
 
         .visual-core {
@@ -123,6 +171,28 @@
             object-fit: cover;
             animation: float 4s infinite ease-in-out;
             z-index: 2;
+            position: relative;
+        }
+        .smiley-tooltip {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            font-size: 0.8rem;
+            color: #ccc;
+            white-space: nowrap;
+            opacity: 0;
+            transition: 0.3s;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .smiley:hover .smiley-tooltip {
+            opacity: 1;
         }
         .ring-bg {
             position: absolute;
@@ -149,6 +219,22 @@
             border-radius: 30px;
             padding: 25px;
             text-align: center;
+            transition: box-shadow 0.3s;
+        }
+        .card.flash {
+            animation: cardFlash 0.6s ease;
+        }
+        @keyframes cardFlash {
+            0% { box-shadow: 0 0 0 rgba(139, 92, 246, 0); }
+            30% { box-shadow: 0 0 80px rgba(139, 92, 246, 0.4), inset 0 0 40px rgba(139, 92, 246, 0.1); }
+            100% { box-shadow: 0 0 0 rgba(139, 92, 246, 0); }
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0 5px;
         }
         .card-label {
             font-size: 10px;
@@ -157,28 +243,110 @@
             margin-bottom: 20px;
             text-transform: uppercase;
         }
-        .main-image {
+
+        /* Photo slider */
+        .photo-slider {
+            position: relative;
             width: 100%;
+            overflow: hidden;
             border-radius: 16px;
+        }
+        .photo-slider img {
+            width: 100%;
             display: block;
             object-fit: cover;
             border: 1px solid rgba(139, 92, 246, 0.08);
+            transition: opacity 0.4s ease;
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .photo-slider img.active {
+            position: relative;
+            opacity: 1;
+        }
+        .photo-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .photo-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #333;
+            border: 1px solid #555;
+            transition: 0.3s;
+        }
+        .photo-dot.active {
+            background: #8b5cf6;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+        }
+        .photo-dot:hover {
+            background: #8b5cf6;
         }
 
-        .title {
+        /* === SINGLE STATUS CIRCLE === */
+        .status-container {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0 10px;
+        }
+        .status-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+            position: relative;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.1);
+        }
+        .status-circle.green { background: #00ff88; }
+        .status-circle.yellow { background: #ffcc00; }
+        .status-circle.red { background: #ff4444; }
+        .status-circle.gray { background: #888888; }
+        .status-circle.black { background: #1a1a1a; border-color: #444; }
+        .status-circle:hover {
+            transform: scale(1.1);
+            border-color: #8b5cf6;
+            box-shadow: 0 0 40px rgba(139, 92, 246, 0.4);
+        }
+        .status-circle .tooltip-text {
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            color: #888;
+            white-space: nowrap;
+            opacity: 0;
+            transition: 0.3s;
+            pointer-events: none;
+        }
+        .status-circle:hover .tooltip-text {
+            opacity: 1;
+        }
+        .status-circle.active {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Статус-текст */
+        .status-text {
+            font-size: 0.9rem;
+            color: #999;
             text-align: center;
-            font-size: 1.8rem;
-            font-weight: 500;
-            letter-spacing: 4px;
-            color: #bbb;
-            margin: 15px 0 30px;
-            text-transform: uppercase;
+            margin-top: 5px;
         }
-        .title span {
-            color: #8b5cf6;
+        .status-text span {
+            font-weight: 600;
         }
 
-        /* === MODAL === */
+        /* === MODAL INSTRUCTION (инструкция по цветам) === */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -206,41 +374,46 @@
         .modal-card h2 {
             color: #eee;
             font-weight: 400;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             font-size: 1.5rem;
         }
-        .modal-btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
+        .modal-card .color-list {
+            text-align: left;
+            margin: 0 auto;
+            max-width: 300px;
         }
-        .modal-btn {
+        .modal-card .color-item {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 14px 20px;
-            border-radius: 60px;
-            font-weight: 600;
-            font-size: 1.05rem;
-            border: none;
+            gap: 14px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            margin-bottom: 6px;
             transition: 0.2s;
-            color: #fff;
-            text-decoration: none;
         }
-        .modal-btn.discord {
-            background: #5865F2;
+        .modal-card .color-item:hover {
+            background: rgba(255,255,255,0.05);
         }
-        .modal-btn.discord:hover {
-            background: #4752c4;
-            transform: scale(1.02);
+        .modal-card .color-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.1);
+            flex-shrink: 0;
         }
-        .modal-btn.telegram {
-            background: #0088cc;
+        .modal-card .color-dot.green { background: #00ff88; }
+        .modal-card .color-dot.yellow { background: #ffcc00; }
+        .modal-card .color-dot.red { background: #ff4444; }
+        .modal-card .color-dot.gray { background: #888888; }
+        .modal-card .color-dot.black { background: #1a1a1a; border-color: #444; }
+        .modal-card .color-label {
+            color: #ccc;
+            font-size: 0.95rem;
         }
-        .modal-btn.telegram:hover {
-            background: #0077b3;
-            transform: scale(1.02);
+        .modal-card .color-desc {
+            color: #888;
+            font-size: 0.8rem;
+            margin-left: auto;
         }
         .modal-close {
             margin-top: 24px;
@@ -283,39 +456,115 @@
             .logo { font-size: 1.2rem; }
             .version { font-size: 0.7rem; padding: 2px 8px; }
             .support-btn { padding: 6px 16px; font-size: 0.8rem; }
-            .title { font-size: 1.2rem; }
+            .title-text { font-size: 1.2rem; }
+            .float-letter { font-size: 2rem; }
+            .photo-dot { width: 8px; height: 8px; }
+            .status-circle { width: 50px; height: 50px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- FLOATING LETTERS -->
+    <div id="float-letters"></div>
+
+    <!-- CURSOR -->
     <div id="c-dot"></div>
     <div id="c-ring"></div>
 
+    <!-- TOAST -->
     <div class="toast" id="toast">📋 copied: not.good.morning</div>
 
-    <div class="app">
-        <header class="header">
-            <div class="header-left">
-                <span class="logo">NEKT4R.INK</span>
-                <span class="version">v3.37</span>
-            </div>
-            <button class="support-btn" id="supportBtn">Support</button>
-        </header>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-left">
+            <span class="logo">NEKT4R.INK</span>
+            <span class="version">v3.37</span>
+        </div>
+        <button class="support-btn" id="supportBtn">Support</button>
+    </header>
 
+    <!-- CONTENT -->
+    <div class="app">
         <div class="visual-core">
             <div class="ring-bg"></div>
-            <img src="assets/IMG_20260514_020558_919.jpg" class="smiley" alt="Core">
+            <div class="smiley">
+                <img src="assets/IMG_20260514_020558_919.jpg" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" alt="Core">
+                <div class="smiley-tooltip" id="tooltip">ты здесь</div>
+            </div>
         </div>
 
-        <div class="card">
-            <div class="card-label">Человек, который вас поддержит</div>
-            <img src="assets/nektar.jpg" class="main-image" alt="Agent">
+        <!-- SINGLE STATUS CIRCLE -->
+        <div class="status-container">
+            <div class="status-circle green active" id="statusCircle" data-color="green">
+                <span class="tooltip-text">нажми для инструкции</span>
+            </div>
+        </div>
+        <div class="status-text">Текущее состояние: <span id="statusLabel">в порядке</span></div>
+
+        <!-- TYPING TITLE -->
+        <div class="title-container">
+            <span class="title-text" id="typedTitle"></span>
+            <span class="cursor-blink" id="cursorBlink"></span>
         </div>
 
-        <div class="title">We know when you <span>here.</span></div>
+        <div class="card" id="card">
+            <div class="card-header">
+                <span class="card-label">Человек, который вас поддержит</span>
+            </div>
+            
+            <!-- PHOTO SLIDER -->
+            <div class="photo-slider" id="photoSlider">
+                <img src="assets/nektar.jpg" class="active" data-index="0" alt="Agent 1">
+                <img src="assets/fuck.jpg" data-index="1" alt="Agent 2">
+                <img src="assets/aboba.jpg" data-index="2" alt="Agent 3">
+            </div>
+            
+            <!-- DOTS -->
+            <div class="photo-dots" id="photoDots">
+                <span class="photo-dot active" data-index="0"></span>
+                <span class="photo-dot" data-index="1"></span>
+                <span class="photo-dot" data-index="2"></span>
+            </div>
+        </div>
     </div>
 
+    <!-- MODAL INSTRUCTION -->
+    <div class="modal-overlay" id="instructionModal">
+        <div class="modal-card">
+            <h2>✦ значения цветов ✦</h2>
+            <div class="color-list">
+                <div class="color-item">
+                    <div class="color-dot green"></div>
+                    <span class="color-label">зеленый</span>
+                    <span class="color-desc">в порядке</span>
+                </div>
+                <div class="color-item">
+                    <div class="color-dot yellow"></div>
+                    <span class="color-label">желтый</span>
+                    <span class="color-desc">под сомнением нормальности</span>
+                </div>
+                <div class="color-item">
+                    <div class="color-dot red"></div>
+                    <span class="color-label">красный</span>
+                    <span class="color-desc">разбит</span>
+                </div>
+                <div class="color-item">
+                    <div class="color-dot gray"></div>
+                    <span class="color-label">серый</span>
+                    <span class="color-desc">обижен на мир</span>
+                </div>
+                <div class="color-item">
+                    <div class="color-dot black"></div>
+                    <span class="color-label">черный</span>
+                    <span class="color-desc">изолирован от всех, хочет смерти</span>
+                </div>
+            </div>
+            <button class="modal-close" id="closeInstructionBtn">close</button>
+        </div>
+    </div>
+
+    <!-- SUPPORT MODAL -->
     <div class="modal-overlay" id="supportModal">
         <div class="modal-card">
             <h2>✦ connect ✦</h2>
@@ -331,86 +580,286 @@
         </div>
     </div>
 
+    <script src="config.js"></script>
     <script>
-        // === CURSOR ===
-        const dot = document.getElementById('c-dot');
-        const ring = document.getElementById('c-ring');
-        let mouseX = -100, mouseY = -100;
-        let ringX = -100, ringY = -100;
-        let ringActive = false;
+        (function() {
+            // === FLOATING LETTERS ===
+            const lettersContainer = document.getElementById('float-letters');
+            const letters = ['N', 'E', 'K', 'T', '4', 'R'];
+            letters.forEach((letter, index) => {
+                const el = document.createElement('div');
+                el.className = 'float-letter';
+                el.textContent = letter;
+                el.style.left = (10 + Math.random() * 80) + '%';
+                el.style.top = (10 + Math.random() * 80) + '%';
+                el.style.fontSize = (2 + Math.random() * 3) + 'rem';
+                el.style.animationDuration = (20 + Math.random() * 20) + 's';
+                el.style.animationDelay = (index * 2 + Math.random() * 3) + 's';
+                el.style.opacity = 0.04 + Math.random() * 0.04;
+                lettersContainer.appendChild(el);
+            });
 
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            dot.style.left = mouseX + 'px';
-            dot.style.top = mouseY + 'px';
-            if (!ringActive) {
-                ring.style.left = mouseX + 'px';
-                ring.style.top = mouseY + 'px';
-                ringX = mouseX;
-                ringY = mouseY;
-                ringActive = true;
+            // === CURSOR ===
+            const dot = document.getElementById('c-dot');
+            const ring = document.getElementById('c-ring');
+            let mouseX = -100, mouseY = -100;
+            let ringX = -100, ringY = -100;
+            let ringActive = false;
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                dot.style.left = mouseX + 'px';
+                dot.style.top = mouseY + 'px';
+                if (!ringActive) {
+                    ring.style.left = mouseX + 'px';
+                    ring.style.top = mouseY + 'px';
+                    ringX = mouseX;
+                    ringY = mouseY;
+                    ringActive = true;
+                }
+                initAudio();
+            });
+
+            function animateRing() {
+                if (!ringActive) return;
+                const dx = mouseX - ringX;
+                const dy = mouseY - ringY;
+                ringX += dx * 0.12;
+                ringY += dy * 0.12;
+                ring.style.left = ringX + 'px';
+                ring.style.top = ringY + 'px';
+                requestAnimationFrame(animateRing);
             }
-        });
+            animateRing();
 
-        function animateRing() {
-            if (!ringActive) return;
-            const dx = mouseX - ringX;
-            const dy = mouseY - ringY;
-            ringX += dx * 0.12;
-            ringY += dy * 0.12;
-            ring.style.left = ringX + 'px';
-            ring.style.top = ringY + 'px';
-            requestAnimationFrame(animateRing);
-        }
-        animateRing();
-
-        document.querySelectorAll('.support-btn, .modal-btn, .modal-close, .logo, .smiley').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                ring.style.width = '50px';
-                ring.style.height = '50px';
-                ring.style.borderColor = '#d946ef';
+            document.querySelectorAll('.support-btn, .modal-btn, .modal-close, .logo, .smiley, .photo-dot, .status-circle').forEach(el => {
+                el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+                el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
             });
-            el.addEventListener('mouseleave', () => {
-                ring.style.width = '30px';
-                ring.style.height = '30px';
-                ring.style.borderColor = '#8b5cf6';
+
+            // === AUDIO ===
+            let audioInitialized = false;
+            let audioElement = null;
+
+            function initAudio() {
+                if (audioInitialized) return;
+                audioInitialized = true;
+                try {
+                    audioElement = new Audio('https://stream.zeno.fm/0r0xa792kwzuv');
+                    audioElement.loop = true;
+                    audioElement.volume = 0.6;
+                    audioElement.play().catch(() => {});
+                } catch (e) {}
+            }
+            document.addEventListener('click', initAudio);
+
+            // === TOOLTIP JOKES ===
+            const tooltip = document.getElementById('tooltip');
+            const jokes = [
+                "ты здесь",
+                "погнали",
+                "ой всё",
+                "не спи",
+                "семь пятниц",
+                "ждун",
+                "спокойной ночи",
+                "доброе утро",
+                "work hard, play hard",
+                "минута тишины",
+                "поехали"
+            ];
+            tooltip.textContent = jokes[Math.floor(Math.random() * jokes.length)];
+
+            // === CARD FLASH ===
+            const card = document.getElementById('card');
+            card.addEventListener('click', () => {
+                card.classList.remove('flash');
+                void card.offsetWidth;
+                card.classList.add('flash');
             });
-        });
 
-        // === MODAL ===
-        const modal = document.getElementById('supportModal');
-        const supportBtn = document.getElementById('supportBtn');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const discordBtn = document.getElementById('discordBtn');
-        const toast = document.getElementById('toast');
+            // === PHOTO SLIDER ===
+            const images = document.querySelectorAll('.photo-slider img');
+            const dots = document.querySelectorAll('.photo-dot');
+            let currentPhoto = 0;
+            let autoSlideInterval = null;
 
-        supportBtn.addEventListener('click', () => modal.classList.add('active'));
-        closeModalBtn.addEventListener('click', () => modal.classList.remove('active'));
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) modal.classList.remove('active');
-        });
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') modal.classList.remove('active');
-        });
+            function showPhoto(index) {
+                images.forEach(img => img.classList.remove('active'));
+                dots.forEach(dot => dot.classList.remove('active'));
+                images[index].classList.add('active');
+                dots[index].classList.add('active');
+                currentPhoto = index;
+            }
 
-        // === DISCORD COPY ===
-        discordBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const tag = 'not.good.morning';
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(tag).then(() => {
-                    toast.classList.add('show');
-                    setTimeout(() => toast.classList.remove('show'), 2400);
+            function nextPhoto() {
+                const next = (currentPhoto + 1) % images.length;
+                showPhoto(next);
+            }
+
+            function startAutoSlide() {
+                if (autoSlideInterval) clearInterval(autoSlideInterval);
+                autoSlideInterval = setInterval(nextPhoto, 4000);
+            }
+
+            function stopAutoSlide() {
+                if (autoSlideInterval) {
+                    clearInterval(autoSlideInterval);
+                    autoSlideInterval = null;
+                }
+            }
+
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    stopAutoSlide();
+                    showPhoto(index);
+                    startAutoSlide();
                 });
-            }
-        });
+            });
 
-        // === PRELOAD ===
-        ['assets/IMG_20260514_020558_919.jpg', 'assets/nektar.jpg'].forEach(src => {
-            const img = new Image();
-            img.src = src;
-        });
+            images.forEach((img, index) => {
+                img.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    stopAutoSlide();
+                    const next = (index + 1) % images.length;
+                    showPhoto(next);
+                    startAutoSlide();
+                });
+            });
+
+            startAutoSlide();
+
+            // === TYPING EFFECT ===
+            const titleEl = document.getElementById('typedTitle');
+            const cursorBlink = document.getElementById('cursorBlink');
+            const fullText = 'Этот сайт показывает состояние <span class="purple">нектара</span>.';
+            let charIndex = 0;
+
+            function typeText() {
+                if (charIndex <= fullText.length) {
+                    titleEl.innerHTML = fullText.substring(0, charIndex);
+                    charIndex++;
+                    setTimeout(typeText, 50 + Math.random() * 30);
+                } else {
+                    cursorBlink.style.animation = 'blink 1s step-end infinite';
+                }
+            }
+            setTimeout(typeText, 300);
+
+            // === SINGLE STATUS CIRCLE ===
+            const statusCircle = document.getElementById('statusCircle');
+            const statusLabel = document.getElementById('statusLabel');
+            const instructionModal = document.getElementById('instructionModal');
+            const closeInstructionBtn = document.getElementById('closeInstructionBtn');
+
+            const statusMap = {
+                green: { label: 'в порядке', class: 'green' },
+                yellow: { label: 'под сомнением нормальности', class: 'yellow' },
+                red: { label: 'разбит', class: 'red' },
+                gray: { label: 'обижен на мир', class: 'gray' },
+                black: { label: 'изолирован от всех, хочет смерти', class: 'black' }
+            };
+
+            // Установка статуса
+            function setStatus(color) {
+                // Удаляем все классы цветов
+                statusCircle.className = 'status-circle';
+                // Добавляем нужный цвет
+                if (statusMap[color]) {
+                    statusCircle.classList.add(statusMap[color].class);
+                    statusCircle.dataset.color = color;
+                    statusLabel.textContent = statusMap[color].label;
+                }
+            }
+
+            // Чтение конфига из config.js
+            function loadConfig() {
+                if (typeof CONFIG !== 'undefined' && CONFIG.status) {
+                    setStatus(CONFIG.status);
+                } else {
+                    // По умолчанию зеленый
+                    setStatus('green');
+                }
+            }
+
+            // Открытие инструкции
+            function openInstruction() {
+                instructionModal.classList.add('active');
+                stopAutoSlide();
+            }
+
+            function closeInstruction() {
+                instructionModal.classList.remove('active');
+                startAutoSlide();
+            }
+
+            // Клик по кругу — открывает инструкцию
+            statusCircle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openInstruction();
+            });
+
+            closeInstructionBtn.addEventListener('click', closeInstruction);
+            instructionModal.addEventListener('click', (e) => {
+                if (e.target === instructionModal) closeInstruction();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeInstruction();
+                }
+            });
+
+            // Загружаем конфиг
+            loadConfig();
+
+            // === SUPPORT MODAL ===
+            const supportModal = document.getElementById('supportModal');
+            const supportBtn = document.getElementById('supportBtn');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const discordBtn = document.getElementById('discordBtn');
+            const toast = document.getElementById('toast');
+
+            function openSupport() {
+                supportModal.classList.add('active');
+                stopAutoSlide();
+            }
+
+            function closeSupport() {
+                supportModal.classList.remove('active');
+                startAutoSlide();
+            }
+
+            supportBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openSupport();
+            });
+
+            closeModalBtn.addEventListener('click', closeSupport);
+            supportModal.addEventListener('click', (e) => {
+                if (e.target === supportModal) closeSupport();
+            });
+
+            // === DISCORD COPY ===
+            discordBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const tag = 'not.good.morning';
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(tag).then(() => {
+                        toast.classList.add('show');
+                        setTimeout(() => toast.classList.remove('show'), 2400);
+                    });
+                }
+            });
+
+            // === PRELOAD IMAGES ===
+            ['assets/IMG_20260514_020558_919.jpg', 'assets/nektar.jpg', 'assets/fuck.jpg', 'assets/aboba.jpg'].forEach(src => {
+                const img = new Image();
+                img.src = src;
+            });
+
+        })();
     </script>
 </body>
 </html>
