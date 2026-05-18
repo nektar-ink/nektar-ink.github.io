@@ -26,7 +26,10 @@ jobs:
       
       - name: Update status.json
         run: |
-          echo '{"status":"${{ github.event.inputs.status }}","lastUpdate":"'$(date -Iseconds)'"}' > status.json
+          echo '{
+              "status": "${{ github.event.inputs.status }}",
+              "lastUpdate": "'$(date -Iseconds)'"
+          }' > status.json
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add status.json
