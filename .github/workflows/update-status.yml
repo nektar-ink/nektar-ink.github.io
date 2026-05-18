@@ -14,20 +14,25 @@ on:
           - gray
           - black
 
+permissions:
+  contents: write
+
 jobs:
   update:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GH_TOKEN }}
       
-      - name: Update status.json
+      - name: Update status.json using GitHub CLI
         run: |
+          # Создаём новый контент
           echo '{"status":"${{ github.event.inputs.status }}","lastUpdate":"'$(date -Iseconds)'"}' > status.json
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add status.json
-          git commit -m "Update status to ${{ github.event.inputs.status }}"
-          git push
+          
+          # Используем gh для коммита и пуша
+          gh config set user.email "action@github.com"
+          gh config set user.name "GitHub Action"
+          gh api -X PUT /repos/${{ github.repository }}/contents/status.json \
+            -f message="Update status to ${{ github.event.inputs.status }}" \
+            -f content="$(base64 -w 0 status.json)" \
+            -f sha="$(git ls-files -s status.json | awk '{print $2}')"
