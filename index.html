@@ -25,7 +25,7 @@
             overflow-x: hidden;
         }
 
-        /* === BACKGROUND PRANK — матричный дождь === */
+        /* === MATRIX BACKGROUND === */
         #matrix-canvas {
             position: fixed;
             top: 0;
@@ -336,7 +336,7 @@
             color: white;
         }
 
-        /* === CARD SECTION === */
+        /* === CARD SECTION — одна картинка с наведением === */
         .card-section {
             width: 100%;
             margin-bottom: 60px;
@@ -371,48 +371,35 @@
             color: #4ade80;
             text-transform: uppercase;
         }
-        .photo-slider {
+        .hover-image-container {
             position: relative;
             width: 100%;
-            overflow: hidden;
             border-radius: 12px;
+            overflow: hidden;
         }
-        .photo-slider img {
+        .hover-image-container img {
             width: 100%;
             display: block;
             object-fit: cover;
             border: 1px solid rgba(255,255,255,0.05);
-            transition: opacity 0.4s ease;
-            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+        .hover-image-container img.default {
+            position: relative;
+            z-index: 1;
+        }
+        .hover-image-container img.hover {
             position: absolute;
             top: 0;
             left: 0;
+            z-index: 2;
+            opacity: 0;
         }
-        .photo-slider img.active {
-            position: relative;
+        .hover-image-container:hover img.default {
+            opacity: 0;
+        }
+        .hover-image-container:hover img.hover {
             opacity: 1;
-        }
-        .photo-dots {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        .photo-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #333;
-            border: 1px solid #555;
-            transition: 0.3s;
-        }
-        .photo-dot.active {
-            background: #4ade80;
-            border-color: #4ade80;
-            box-shadow: 0 0 15px rgba(74, 222, 128, 0.3);
-        }
-        .photo-dot:hover {
-            background: #4ade80;
         }
 
         /* === MODAL INSTRUCTION === */
@@ -645,21 +632,15 @@
             </div>
         </section>
 
-        <!-- CARD SECTION -->
+        <!-- CARD SECTION — одна картинка с наведением -->
         <section class="card-section">
             <div class="card" id="card">
                 <div class="card-header">
                     <span class="card-label">✦ человек, который вас поддержит</span>
                 </div>
-                <div class="photo-slider" id="photoSlider">
-                    <img src="assets/nektar.jpg" class="active" data-index="0" alt="Agent 1">
-                    <img src="assets/fuck.jpg" data-index="1" alt="Agent 2">
-                    <img src="assets/aboba.jpg" data-index="2" alt="Agent 3">
-                </div>
-                <div class="photo-dots" id="photoDots">
-                    <span class="photo-dot active" data-index="0"></span>
-                    <span class="photo-dot" data-index="1"></span>
-                    <span class="photo-dot" data-index="2"></span>
+                <div class="hover-image-container">
+                    <img src="assets/image-11.png" class="default" alt="Agent default">
+                    <img src="assets/image-12.png" class="hover" alt="Agent hover">
                 </div>
             </div>
         </section>
@@ -864,58 +845,6 @@
                 card.classList.add('flash');
             });
 
-            // === PHOTO SLIDER ===
-            const images = document.querySelectorAll('.photo-slider img');
-            const dots = document.querySelectorAll('.photo-dot');
-            let currentPhoto = 0;
-            let autoSlideInterval = null;
-
-            function showPhoto(index) {
-                images.forEach(img => img.classList.remove('active'));
-                dots.forEach(dot => dot.classList.remove('active'));
-                images[index].classList.add('active');
-                dots[index].classList.add('active');
-                currentPhoto = index;
-            }
-
-            function nextPhoto() {
-                const next = (currentPhoto + 1) % images.length;
-                showPhoto(next);
-            }
-
-            function startAutoSlide() {
-                if (autoSlideInterval) clearInterval(autoSlideInterval);
-                autoSlideInterval = setInterval(nextPhoto, 4000);
-            }
-
-            function stopAutoSlide() {
-                if (autoSlideInterval) {
-                    clearInterval(autoSlideInterval);
-                    autoSlideInterval = null;
-                }
-            }
-
-            dots.forEach((dot, index) => {
-                dot.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    stopAutoSlide();
-                    showPhoto(index);
-                    startAutoSlide();
-                });
-            });
-
-            images.forEach((img, index) => {
-                img.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    stopAutoSlide();
-                    const next = (index + 1) % images.length;
-                    showPhoto(next);
-                    startAutoSlide();
-                });
-            });
-
-            startAutoSlide();
-
             // === STATUS CIRCLE ===
             const statusCircle = document.getElementById('statusCircle');
             const statusLabel = document.getElementById('statusLabel');
@@ -1028,7 +957,7 @@
             });
 
             // === PRELOAD IMAGES ===
-            ['assets/IMG_20260514_020558_919.jpg', 'assets/nektar.jpg', 'assets/fuck.jpg', 'assets/aboba.jpg'].forEach(src => {
+            ['assets/IMG_20260514_020558_919.jpg', 'assets/image-11.png', 'assets/image-12.png'].forEach(src => {
                 const img = new Image();
                 img.src = src;
             });
