@@ -25,7 +25,7 @@
             overflow-x: hidden;
         }
 
-        /* === BACKGROUND PRANK (1) — матричный дождь на фоне === */
+        /* === BACKGROUND PRANK — матричный дождь === */
         #matrix-canvas {
             position: fixed;
             top: 0;
@@ -162,7 +162,7 @@
             z-index: 5;
         }
 
-        /* === PRANK (2) — случайная фраза при загрузке === */
+        /* === RANDOM PHRASE === */
         .random-phrase {
             font-size: 0.8rem;
             color: #555;
@@ -209,6 +209,13 @@
         }
         .hero-title .highlight {
             color: #4ade80;
+        }
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: #888;
+            margin-bottom: 20px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
         }
         .hero-desc {
             font-size: 1rem;
@@ -564,6 +571,7 @@
             .app { padding: 30px 20px; }
             .hero { flex-direction: column; align-items: flex-start; }
             .hero-title { font-size: 2.5rem; }
+            .hero-subtitle { font-size: 1rem; }
             .hero-right { width: 100%; }
             .status-section { flex-direction: column; align-items: flex-start; }
             .footer { flex-direction: column; align-items: flex-start; gap: 10px; }
@@ -572,7 +580,7 @@
 </head>
 <body>
 
-    <!-- MATRIX BACKGROUND (1) -->
+    <!-- MATRIX BACKGROUND -->
     <canvas id="matrix-canvas"></canvas>
 
     <!-- CURSOR -->
@@ -599,7 +607,7 @@
 
     <!-- MAIN CONTENT -->
     <main class="app">
-        <!-- RANDOM PHRASE (2) -->
+        <!-- RANDOM PHRASE -->
         <div class="random-phrase" id="randomPhrase">✦ <span>загрузка</span> ...</div>
 
         <!-- HERO SECTION -->
@@ -607,15 +615,16 @@
             <div class="hero-left">
                 <div class="hero-tag">✦ состояние нектара</div>
                 <h1 class="hero-title">
-                    Этот сайт показывает<br>
-                    состояние <span class="highlight">нектара</span>.
+                    Внутри каждого из нас <span class="highlight">огонь</span>.<br>
+                    Вопрос лишь в том, <span class="highlight">горит</span> он или <span class="highlight">тлеет</span>.
                 </h1>
+                <div class="hero-subtitle">Твой статус — твоя энергия. Выбери цвет и почувствуй.</div>
                 <p class="hero-desc">
-                    Выбери настроение и смотри, как меняется состояние. 
-                    Каждый цвет — это эмоция, каждое состояние — история.
+                    Этот сайт — не просто статус. Это пульс, настроение, отражение того, что внутри.
+                    Каждый оттенок — это шаг к пониманию себя.
                 </p>
                 <div class="hero-buttons">
-                    <button class="hero-btn primary" id="scrollToStatus">СМОТРЕТЬ СОСТОЯНИЕ</button>
+                    <button class="hero-btn primary" id="scrollToStatus">ПОЧУВСТВОВАТЬ СОСТОЯНИЕ</button>
                 </div>
             </div>
             <div class="hero-right">
@@ -722,7 +731,7 @@
 
     <script>
         (function() {
-            // === MATRIX BACKGROUND (1) ===
+            // === MATRIX BACKGROUND ===
             const canvas = document.getElementById('matrix-canvas');
             const ctx = canvas.getContext('2d');
             let w, h;
@@ -758,7 +767,7 @@
             }
             drawMatrix();
 
-            // === RANDOM PHRASE (2) ===
+            // === RANDOM PHRASE ===
             const phrases = [
                 "ты здесь",
                 "погнали",
@@ -774,7 +783,10 @@
                 "на связи",
                 "держи в курсе",
                 "всё будет норм",
-                "не дрейфь"
+                "не дрейфь",
+                "врубайся",
+                "ощути момент",
+                "чувствуй ритм"
             ];
             const phraseEl = document.getElementById('randomPhrase');
             phraseEl.innerHTML = '✦ <span>' + phrases[Math.floor(Math.random() * phrases.length)] + '</span>';
