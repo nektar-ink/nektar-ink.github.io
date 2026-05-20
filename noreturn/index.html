@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Точка невозврата</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            min-height: 100vh;
+            font-family: 'Inter', system-ui, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 60px;
+        }
+
+        .text-content {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .text-content h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #ff0000;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            letter-spacing: -1px;
+        }
+
+        .text-content p {
+            font-size: 1.1rem;
+            color: #ccc;
+            line-height: 1.8;
+            letter-spacing: 0.3px;
+        }
+
+        .image-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-content img {
+            max-width: 100%;
+            height: auto;
+            max-height: 80vh;
+            border-radius: 12px;
+            object-fit: contain;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .text-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .text-content p {
+                font-size: 1rem;
+            }
+
+            .image-content {
+                width: 100%;
+            }
+
+            .image-content img {
+                max-height: 50vh;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="text-content">
+            <h1>ВЫ ДОСТИГЛИ ТОЧКИ НЕВОЗВРАТА</h1>
+            <p>
+                После пересечения точки невозврата может произойти <strong>ВСЁ НЕОЖИДАННОЕ</strong>.<br><br>
+                Это момент, когда психика перестаёт обслуживать привычный сценарий.<br><br>
+                И либо встретитесь в этой уязвимости по-настоящему — либо разминётесь навсегда, уже зная правду.
+            </p>
+        </div>
+        <div class="image-content">
+            <img src="assets/worried.png" alt="Worried">
+        </div>
+    </div>
+</body>
+</html>
