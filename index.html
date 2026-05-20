@@ -175,7 +175,7 @@
             color: #4ade80;
         }
 
-        /* === HERO SECTION — улыбашка сверху справа === */
+        /* === HERO SECTION === */
         .hero {
             display: flex;
             justify-content: space-between;
@@ -360,7 +360,7 @@
             color: white;
         }
 
-        /* === CARD SECTION — 3 картинки в слайдере === */
+        /* === CARD SECTION — слайдер === */
         .card-section {
             width: 100%;
             margin-bottom: 60px;
@@ -439,7 +439,7 @@
             background: #4ade80;
         }
 
-        /* === MODAL INSTRUCTION === */
+        /* === CONTACT MODAL (связи) === */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -469,43 +469,38 @@
             margin-bottom: 25px;
             font-size: 1.5rem;
         }
-        .modal-card .color-list {
-            text-align: left;
-            margin: 0 auto;
-            max-width: 300px;
+        .modal-btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
-        .modal-card .color-item {
+        .modal-btn {
             display: flex;
             align-items: center;
-            gap: 14px;
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin-bottom: 6px;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 20px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            border: none;
             transition: 0.2s;
+            color: #fff;
+            text-decoration: none;
         }
-        .modal-card .color-item:hover {
-            background: rgba(255,255,255,0.05);
+        .modal-btn.discord {
+            background: #5865F2;
         }
-        .modal-card .color-dot {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.1);
-            flex-shrink: 0;
+        .modal-btn.discord:hover {
+            background: #4752c4;
+            transform: scale(1.02);
         }
-        .modal-card .color-dot.green { background: #4ade80; }
-        .modal-card .color-dot.yellow { background: #ffcc00; }
-        .modal-card .color-dot.red { background: #ff4444; }
-        .modal-card .color-dot.gray { background: #888888; }
-        .modal-card .color-dot.black { background: #1a1a1a; border-color: #444; }
-        .modal-card .color-label {
-            color: #ccc;
-            font-size: 0.95rem;
+        .modal-btn.telegram {
+            background: #0088cc;
         }
-        .modal-card .color-desc {
-            color: #888;
-            font-size: 0.8rem;
-            margin-left: auto;
+        .modal-btn.telegram:hover {
+            background: #0077b3;
+            transform: scale(1.02);
         }
         .modal-close {
             margin-top: 24px;
@@ -623,9 +618,9 @@
         </div>
         <div class="header-right">
             <ul class="nav-links">
-                <li><a href="#">CONTACT</a></li>
+                <li><a href="#" id="contactLink">CONTACT</a></li>
             </ul>
-            <button class="header-btn" id="supportBtn">GET HACKER KIT</button>
+            <button class="header-btn" id="supportBtn">GET UNFAIR PRISM KIT</button>
         </div>
     </header>
 
@@ -634,7 +629,7 @@
         <!-- RANDOM PHRASE -->
         <div class="random-phrase" id="randomPhrase">✦ <span>загрузка</span> ...</div>
 
-        <!-- HERO SECTION — улыбашка сверху справа -->
+        <!-- HERO SECTION -->
         <section class="hero">
             <div class="hero-left">
                 <div class="hero-tag">✦ состояние нектара</div>
@@ -672,7 +667,7 @@
             </div>
         </section>
 
-        <!-- CARD SECTION — 3 картинки в слайдере -->
+        <!-- CARD SECTION — слайдер -->
         <section class="card-section">
             <div class="card" id="card">
                 <div class="card-header">
@@ -692,43 +687,8 @@
         </section>
     </main>
 
-    <!-- MODAL INSTRUCTION -->
-    <div class="modal-overlay" id="instructionModal">
-        <div class="modal-card">
-            <h2>✦ значения цветов ✦</h2>
-            <div class="color-list">
-                <div class="color-item">
-                    <div class="color-dot green"></div>
-                    <span class="color-label">зеленый</span>
-                    <span class="color-desc">в порядке</span>
-                </div>
-                <div class="color-item">
-                    <div class="color-dot yellow"></div>
-                    <span class="color-label">желтый</span>
-                    <span class="color-desc">под сомнением нормальности</span>
-                </div>
-                <div class="color-item">
-                    <div class="color-dot red"></div>
-                    <span class="color-label">красный</span>
-                    <span class="color-desc">разбит</span>
-                </div>
-                <div class="color-item">
-                    <div class="color-dot gray"></div>
-                    <span class="color-label">серый</span>
-                    <span class="color-desc">обижен на мир</span>
-                </div>
-                <div class="color-item">
-                    <div class="color-dot black"></div>
-                    <span class="color-label">черный</span>
-                    <span class="color-desc">изолирован от всех, хочет смерти</span>
-                </div>
-            </div>
-            <button class="modal-close" id="closeInstructionBtn">close</button>
-        </div>
-    </div>
-
-    <!-- SUPPORT MODAL -->
-    <div class="modal-overlay" id="supportModal">
+    <!-- CONTACT MODAL (связи) -->
+    <div class="modal-overlay" id="contactModal">
         <div class="modal-card">
             <h2>✦ connect ✦</h2>
             <div class="modal-btn-group">
@@ -740,6 +700,22 @@
                 </a>
             </div>
             <button class="modal-close" id="closeModalBtn">close</button>
+        </div>
+    </div>
+
+    <!-- SUPPORT MODAL (для kit) -->
+    <div class="modal-overlay" id="supportModal">
+        <div class="modal-card">
+            <h2>✦ connect ✦</h2>
+            <div class="modal-btn-group">
+                <button class="modal-btn discord" id="discordBtnSupport">
+                    <span>💬</span> Discord
+                </button>
+                <a href="https://t.me/sasibakas1" target="_blank" class="modal-btn telegram">
+                    <span>✈️</span> Telegram
+                </a>
+            </div>
+            <button class="modal-close" id="closeModalBtnSupport">close</button>
         </div>
     </div>
 
@@ -1015,12 +991,51 @@
                 }
             });
 
-            // === SUPPORT MODAL ===
-            const supportModal = document.getElementById('supportModal');
-            const supportBtn = document.getElementById('supportBtn');
+            // === CONTACT MODAL ===
+            const contactModal = document.getElementById('contactModal');
+            const contactLink = document.getElementById('contactLink');
             const closeModalBtn = document.getElementById('closeModalBtn');
             const discordBtn = document.getElementById('discordBtn');
             const toast = document.getElementById('toast');
+
+            function openContact() {
+                contactModal.classList.add('active');
+                stopAutoSlide();
+            }
+
+            function closeContact() {
+                contactModal.classList.remove('active');
+                startAutoSlide();
+            }
+
+            contactLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                openContact();
+            });
+
+            closeModalBtn.addEventListener('click', closeContact);
+            contactModal.addEventListener('click', (e) => {
+                if (e.target === contactModal) closeContact();
+            });
+
+            // === DISCORD COPY (CONTACT) ===
+            discordBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const tag = 'zhenya_cerebro';
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(tag).then(() => {
+                        toast.classList.add('show');
+                        setTimeout(() => toast.classList.remove('show'), 2400);
+                    });
+                }
+            });
+
+            // === SUPPORT MODAL ===
+            const supportModal = document.getElementById('supportModal');
+            const supportBtn = document.getElementById('supportBtn');
+            const closeModalBtnSupport = document.getElementById('closeModalBtnSupport');
+            const discordBtnSupport = document.getElementById('discordBtnSupport');
 
             function openSupport() {
                 supportModal.classList.add('active');
@@ -1037,13 +1052,13 @@
                 openSupport();
             });
 
-            closeModalBtn.addEventListener('click', closeSupport);
+            closeModalBtnSupport.addEventListener('click', closeSupport);
             supportModal.addEventListener('click', (e) => {
                 if (e.target === supportModal) closeSupport();
             });
 
-            // === DISCORD COPY ===
-            discordBtn.addEventListener('click', (e) => {
+            // === DISCORD COPY (SUPPORT) ===
+            discordBtnSupport.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const tag = 'zhenya_cerebro';
                 if (navigator.clipboard) {
