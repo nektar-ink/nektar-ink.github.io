@@ -25,35 +25,24 @@
             overflow-x: hidden;
         }
 
-        /* === MATRIX BACKGROUND === */
-        #matrix-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0.08;
-        }
-
-        /* === CUSTOM CURSOR === */
+        /* === CUSTOM CURSOR — исправлен === */
         #c-dot {
             position: fixed;
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             background: white;
             border-radius: 50%;
             pointer-events: none;
             z-index: 999999;
             transform: translate(-50%, -50%);
-            transition: width 0.1s, height 0.1s;
+            transition: width 0.15s, height 0.15s;
+            will-change: transform;
         }
         #c-ring {
             position: fixed;
-            width: 30px;
-            height: 30px;
-            border: 1.5px solid #4ade80;
+            width: 40px;
+            height: 40px;
+            border: 2px solid #4ade80;
             border-radius: 50%;
             pointer-events: none;
             z-index: 999998;
@@ -63,8 +52,8 @@
             will-change: transform;
         }
         #c-ring.hover {
-            width: 50px;
-            height: 50px;
+            width: 56px;
+            height: 56px;
             border-color: #4ade80;
             box-shadow: 0 0 40px rgba(74, 222, 128, 0.3);
         }
@@ -284,80 +273,101 @@
             opacity: 1;
         }
 
-        /* === STATUS SECTION === */
-        .status-section {
+        /* === DISCORD CARD (вместо старого статуса) === */
+        .discord-section {
             width: 100%;
             margin-bottom: 60px;
             padding: 40px;
             border-top: 1px solid rgba(255,255,255,0.06);
             border-bottom: 1px solid rgba(255,255,255,0.06);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 30px;
         }
-        .status-left {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+        #discord-card {
+            background: rgba(20, 20, 30, 0.5);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 20px;
+            max-width: 400px;
+            margin: 0 auto;
         }
-        .status-label {
-            font-size: 0.65rem;
-            letter-spacing: 2px;
-            color: #4ade80;
-            text-transform: uppercase;
-        }
-        .status-circle-wrapper {
+        .discord-header {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
         }
-        .status-circle {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            border: 2px solid rgba(255,255,255,0.1);
-            transition: all 0.3s;
+        .discord-avatar-container {
             position: relative;
-            cursor: pointer;
-            box-shadow: 0 0 20px rgba(74, 222, 128, 0.1);
+            width: 60px;
+            height: 60px;
         }
-        .status-circle.green { background: #4ade80; }
-        .status-circle.yellow { background: #ffcc00; }
-        .status-circle.red { background: #ff4444; }
-        .status-circle.gray { background: #888888; }
-        .status-circle.black { background: #1a1a1a; border-color: #444; }
-        .status-circle:hover {
-            transform: scale(1.05);
-            border-color: #4ade80;
-            box-shadow: 0 0 40px rgba(74, 222, 128, 0.3);
+        #discord-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
         }
-        .status-circle.active {
-            border-color: #4ade80;
-            box-shadow: 0 0 30px rgba(74, 222, 128, 0.4);
-        }
-        .status-circle .tooltip-text {
+        #discord-status-dot {
             position: absolute;
-            bottom: -35px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.7rem;
-            color: #888;
-            white-space: nowrap;
-            opacity: 0;
-            transition: 0.3s;
-            pointer-events: none;
+            bottom: 0;
+            right: 0;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid #0a0a0a;
+            transition: background 0.3s;
         }
-        .status-circle:hover .tooltip-text {
-            opacity: 1;
+        #discord-status-dot.online { background: #3ba55c; }
+        #discord-status-dot.idle { background: #faa61a; }
+        #discord-status-dot.dnd { background: #ed4245; }
+        #discord-status-dot.offline { background: #747f8d; }
+        .discord-username {
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
         }
-        .status-text {
+        .discord-displayname {
             font-size: 0.9rem;
             color: #888;
         }
-        .status-text span {
-            font-weight: 600;
+        .discord-activity {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+        }
+        .spotify-activity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .spotify-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .spotify-song {
+            font-weight: 500;
             color: white;
+        }
+        .spotify-artist {
+            font-size: 0.8rem;
+            color: #888;
+        }
+        .game-activity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .game-name {
+            font-weight: 500;
+            color: white;
+        }
+        .discord-bio {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: #888;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
         }
 
         /* === CARD SECTION — слайдер === */
@@ -439,7 +449,7 @@
             background: #4ade80;
         }
 
-        /* === CONTACT MODAL (связи) === */
+        /* === MODALS — единая структура === */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -592,14 +602,15 @@
             .hero-title { font-size: 2.5rem; }
             .hero-subtitle { font-size: 1rem; }
             .hero-right { width: 100%; }
-            .status-section { flex-direction: column; align-items: flex-start; }
+            .discord-section { padding: 20px; }
+            #discord-card { max-width: 100%; }
             .footer { flex-direction: column; align-items: flex-start; gap: 10px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- MATRIX BACKGROUND -->
+    <!-- MATRIX BACKGROUND (опционально) -->
     <canvas id="matrix-canvas"></canvas>
 
     <!-- CURSOR -->
@@ -654,15 +665,24 @@
             </div>
         </section>
 
-        <!-- STATUS SECTION -->
-        <section class="status-section" id="statusSection">
-            <div class="status-left">
-                <div class="status-label">✦ текущее состояние</div>
-                <div class="status-circle-wrapper">
-                    <div class="status-circle green active" id="statusCircle" data-color="green">
-                        <span class="tooltip-text">нажми для инструкции</span>
+        <!-- DISCORD SECTION — вместо старого статуса -->
+        <section class="discord-section">
+            <div id="discord-card">
+                <div class="discord-header">
+                    <div class="discord-avatar-container">
+                        <img id="discord-avatar" src="" alt="Avatar">
+                        <div id="discord-status-dot" class="status-dot online"></div>
                     </div>
-                    <div class="status-text">Текущее состояние: <span id="statusLabel">в порядке</span></div>
+                    <div class="discord-info">
+                        <div class="discord-username">nekt4r_ink</div>
+                        <div class="discord-displayname">✦ хоцу выстрел</div>
+                    </div>
+                </div>
+                <div class="discord-activity" id="discord-activity">
+                    <!-- Сюда подгрузится активность -->
+                </div>
+                <div class="discord-bio" id="discord-bio">
+                    ʚїɞ
                 </div>
             </div>
         </section>
@@ -687,7 +707,7 @@
         </section>
     </main>
 
-    <!-- CONTACT MODAL (связи) -->
+    <!-- CONTACT MODAL -->
     <div class="modal-overlay" id="contactModal">
         <div class="modal-card">
             <h2>✦ connect ✦</h2>
@@ -734,41 +754,43 @@
 
     <script>
         (function() {
-            // === MATRIX BACKGROUND ===
+            // === MATRIX BACKGROUND (опционально) ===
             const canvas = document.getElementById('matrix-canvas');
-            const ctx = canvas.getContext('2d');
-            let w, h;
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                let w, h;
 
-            function resizeCanvas() {
-                w = canvas.width = window.innerWidth;
-                h = canvas.height = window.innerHeight;
-            }
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-
-            const symbols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}:<>?';
-            const columns = Math.floor(w / 20);
-            const drops = [];
-            for (let i = 0; i < columns; i++) {
-                drops[i] = Math.floor(Math.random() * h / 20);
-            }
-
-            function drawMatrix() {
-                ctx.fillStyle = 'rgba(10, 10, 10, 0.05)';
-                ctx.fillRect(0, 0, w, h);
-                ctx.fillStyle = '#4ade80';
-                ctx.font = '16px monospace';
-                for (let i = 0; i < columns; i++) {
-                    const char = symbols[Math.floor(Math.random() * symbols.length)];
-                    ctx.fillText(char, i * 20, drops[i] * 20);
-                    if (drops[i] * 20 > h && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
-                    drops[i]++;
+                function resizeCanvas() {
+                    w = canvas.width = window.innerWidth;
+                    h = canvas.height = window.innerHeight;
                 }
-                requestAnimationFrame(drawMatrix);
+                resizeCanvas();
+                window.addEventListener('resize', resizeCanvas);
+
+                const symbols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}:<>?';
+                const columns = Math.floor(w / 20);
+                const drops = [];
+                for (let i = 0; i < columns; i++) {
+                    drops[i] = Math.floor(Math.random() * h / 20);
+                }
+
+                function drawMatrix() {
+                    ctx.fillStyle = 'rgba(10, 10, 10, 0.05)';
+                    ctx.fillRect(0, 0, w, h);
+                    ctx.fillStyle = '#4ade80';
+                    ctx.font = '16px monospace';
+                    for (let i = 0; i < columns; i++) {
+                        const char = symbols[Math.floor(Math.random() * symbols.length)];
+                        ctx.fillText(char, i * 20, drops[i] * 20);
+                        if (drops[i] * 20 > h && Math.random() > 0.975) {
+                            drops[i] = 0;
+                        }
+                        drops[i]++;
+                    }
+                    requestAnimationFrame(drawMatrix);
+                }
+                drawMatrix();
             }
-            drawMatrix();
 
             // === RANDOM PHRASE ===
             const phrases = [
@@ -794,7 +816,7 @@
             const phraseEl = document.getElementById('randomPhrase');
             phraseEl.innerHTML = '✦ <span>' + phrases[Math.floor(Math.random() * phrases.length)] + '</span>';
 
-            // === CURSOR ===
+            // === CURSOR — ИСПРАВЛЕННЫЙ ===
             const dot = document.getElementById('c-dot');
             const ring = document.getElementById('c-ring');
             let mouseX = -100, mouseY = -100;
@@ -833,7 +855,7 @@
             }
             animateRing();
 
-            document.querySelectorAll('.header-btn, .hero-btn, .modal-btn, .modal-close, .logo, .status-circle, .photo-dot').forEach(el => {
+            document.querySelectorAll('.header-btn, .hero-btn, .modal-btn, .modal-close, .logo, .photo-dot').forEach(el => {
                 el.addEventListener('mouseenter', () => ring.classList.add('hover'));
                 el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
             });
@@ -856,7 +878,7 @@
 
             // === SCROLL TO STATUS ===
             document.getElementById('scrollToStatus').addEventListener('click', () => {
-                document.getElementById('statusSection').scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('discord-section').scrollIntoView({ behavior: 'smooth' });
             });
 
             // === CARD FLASH ===
@@ -919,77 +941,75 @@
 
             startAutoSlide();
 
-            // === STATUS CIRCLE ===
-            const statusCircle = document.getElementById('statusCircle');
-            const statusLabel = document.getElementById('statusLabel');
-            const instructionModal = document.getElementById('instructionModal');
-            const closeInstructionBtn = document.getElementById('closeInstructionBtn');
-
-            const statusMap = {
-                green: { label: 'в порядке', class: 'green' },
-                yellow: { label: 'под сомнением нормальности', class: 'yellow' },
-                red: { label: 'разбит', class: 'red' },
-                gray: { label: 'обижен на мир', class: 'gray' },
-                black: { label: 'изолирован от всех, хочет смерти', class: 'black' }
-            };
-
-            function setStatus(color) {
-                statusCircle.className = 'status-circle';
-                if (statusMap[color]) {
-                    statusCircle.classList.add(statusMap[color].class);
-                    statusCircle.dataset.color = color;
-                    statusLabel.textContent = statusMap[color].label;
-                }
-            }
-
-            // === ЗАГРУЗКА СТАТУСА ===
-            const STATUS_URL = 'https://raw.githubusercontent.com/nektar-ink/nektar-ink.github.io/main/status.json';
-
-            async function loadStatus() {
-                try {
-                    const response = await fetch(STATUS_URL + '?_=' + Date.now());
-                    const data = await response.json();
-                    console.log('✅ Статус загружен:', data.status);
-                    if (data.status && statusMap[data.status]) {
-                        setStatus(data.status);
-                    } else {
-                        console.warn('⚠️ Неверный статус, использую green');
-                        setStatus('green');
+            // === DISCORD LANYARD ===
+            const DISCORD_ID = '1383104235255894109';
+            // Подключаемся к Lanyard
+            function connectLanyard() {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/@zaycation/lanyard/dist/lanyard.js';
+                script.onload = function() {
+                    if (typeof Lanyard !== 'undefined') {
+                        Lanyard.connect(DISCORD_ID);
+                        Lanyard.on("data", (data) => {
+                            console.log(data);
+                            updateDiscordCard(data);
+                        });
                     }
-                } catch (e) {
-                    console.error('❌ Ошибка загрузки статуса:', e);
-                    setStatus('green');
+                };
+                document.head.appendChild(script);
+            }
+
+            function updateDiscordCard(data) {
+                // Аватар
+                const avatarUrl = `https://cdn.discordapp.com/avatars/${data.discord_user.id}/${data.discord_user.avatar}.png`;
+                document.getElementById('discord-avatar').src = avatarUrl;
+
+                // Никнейм и отображаемое имя
+                document.getElementById('discord-username').textContent = data.discord_user.username;
+                document.getElementById('discord-displayname').textContent = data.discord_user.display_name || data.discord_user.username;
+
+                // Статус
+                const status = data.discord_status;
+                const statusDot = document.getElementById('discord-status-dot');
+                statusDot.className = 'status-dot';
+                if (status === 'online') statusDot.classList.add('online');
+                else if (status === 'idle') statusDot.classList.add('idle');
+                else if (status === 'dnd') statusDot.classList.add('dnd');
+                else statusDot.classList.add('offline');
+
+                // Активность (Spotify / игра)
+                const activityContainer = document.getElementById('discord-activity');
+                const activity = data.activities?.find(a => a.type === 0); // Игра или Spotify
+
+                if (activity) {
+                    if (activity.name === 'Spotify') {
+                        activityContainer.innerHTML = `
+                            <div class="spotify-activity">
+                                <div class="spotify-icon">🎵</div>
+                                <div class="spotify-info">
+                                    <div class="spotify-song">${activity.details}</div>
+                                    <div class="spotify-artist">${activity.state}</div>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        activityContainer.innerHTML = `
+                            <div class="game-activity">
+                                <div class="game-icon">🎮</div>
+                                <div class="game-name">${activity.name}</div>
+                            </div>
+                        `;
+                    }
+                } else {
+                    activityContainer.innerHTML = '';
                 }
+
+                // Био
+                const bio = data.discord_user.bio || '';
+                document.getElementById('discord-bio').textContent = bio;
             }
 
-            loadStatus();
-            setInterval(loadStatus, 10000);
-
-            // === ИНСТРУКЦИЯ ===
-            function openInstruction() {
-                instructionModal.classList.add('active');
-                stopAutoSlide();
-            }
-
-            function closeInstruction() {
-                instructionModal.classList.remove('active');
-                startAutoSlide();
-            }
-
-            statusCircle.addEventListener('click', (e) => {
-                e.stopPropagation();
-                openInstruction();
-            });
-
-            closeInstructionBtn.addEventListener('click', closeInstruction);
-            instructionModal.addEventListener('click', (e) => {
-                if (e.target === instructionModal) closeInstruction();
-            });
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    closeInstruction();
-                }
-            });
+            connectLanyard();
 
             // === CONTACT MODAL ===
             const contactModal = document.getElementById('contactModal');
