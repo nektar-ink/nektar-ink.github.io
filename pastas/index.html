@@ -99,7 +99,6 @@
             color: #8b5cf6;
         }
 
-        /* Modal */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -146,6 +145,7 @@
             max-height: 300px;
             overflow-y: auto;
             margin: 16px 0;
+            white-space: pre-wrap;
         }
 
         .modal .copy-btn {
@@ -224,7 +224,6 @@
         <!-- Карточки генерируются через JS -->
     </div>
 
-    <!-- Modal -->
     <div class="modal-overlay" id="pastaModal">
         <div class="modal">
             <h2 id="modalTitle">Название</h2>
@@ -234,18 +233,113 @@
         </div>
     </div>
 
-    <!-- Toast -->
     <div class="toast" id="toast">📋 Скопировано!</div>
 
     <script>
-        // === Данные паст ===
         const pastas = [{
             id: 'nekt4r-5k-kit',
             icon: '🔮',
             name: 'NEKT4R 5K KIT',
             desc: 'Редкий набор для выживания',
             badge: '5K',
-            command: '/give @p minecraft:netherite_chestplate[custom_name={"text":"NEKT4R 5K","color":"#8b5cf6","italic":false},enchantments={binding_curse:67},attribute_modifiers=[{id:"my_custom_speed",type:"movement_speed",amount:0.03,operation:"add_value",slot:"chest"}],equippable={slot:"chest",equip_sound:"ambient.cave"}] 1'
+            command: `/give @p black_shulker_box[custom_name=[{"bold":true,"color":"#404040","italic":true,"text":"🎃 "},{"bold":true,"color":"#383838","italic":true,"text":"|"},{"bold":true,"color":"#303030","italic":true,"text":" "},{"bold":true,"color":"#2C2C2C","italic":true,"text":"n"},{"bold":true,"color":"#282828","italic":true,"text":"e"},{"bold":true,"color":"#242424","italic":true,"text":"k"},{"bold":true,"color":"#202020","italic":true,"text":"t"},{"bold":true,"color":"#1C1C1C","italic":true,"text":"4"},{"bold":true,"color":"#181818","italic":true,"text":"r"},{"bold":true,"color":"#141414","italic":true,"text":"_"},{"bold":true,"color":"#101010","italic":true,"text":"i"},{"bold":true,"color":"#0C0C0C","italic":true,"text":"n"},{"bold":true,"color":"#080808","italic":true,"text":"k"},{"bold":true,"color":"#040404","italic":true,"text":" "},{"bold":true,"color":"#000000","italic":true,"text":"5"},{"bold":true,"color":"#040404","italic":true,"text":"k"},{"bold":true,"color":"#080808","italic":true,"text":" "},{"bold":true,"color":"#0C0C0C","italic":true,"text":"k"},{"bold":true,"color":"#101010","italic":true,"text":"i"},{"bold":true,"color":"#141414","italic":true,"text":"t"}],rarity="epic",unbreakable={},lore=[[{"bold":true,"color":"#404040","italic":true,"text":"🤍 "},{"bold":true,"color":"#383838","italic":true,"text":"|"},{"bold":true,"color":"#303030","italic":true,"text":" "},{"bold":true,"color":"#2C2C2C","italic":true,"text":"c"},{"bold":true,"color":"#282828","italic":true,"text":"o"},{"bold":true,"color":"#242424","italic":true,"text":"r"},{"bold":true,"color":"#202020","italic":true,"text":"r"},{"bold":true,"color":"#1C1C1C","italic":true,"text":"u"},{"bold":true,"color":"#181818","italic":true,"text":"p"},{"bold":true,"color":"#141414","italic":true,"text":"t"},{"bold":true,"color":"#101010","italic":true,"text":" "},{"bold":true,"color":"#0C0C0C","italic":true,"text":"e"},{"bold":true,"color":"#080808","italic":true,"text":"v"},{"bold":true,"color":"#040404","italic":true,"text":"e"},{"bold":true,"color":"#000000","italic":true,"text":"r"},{"bold":true,"color":"#040404","italic":true,"text":"y"},{"bold":true,"color":"#080808","italic":true,"text":"t"},{"bold":true,"color":"#0C0C0C","italic":true,"text":"h"},{"bold":true,"color":"#101010","italic":true,"text":"i"},{"bold":true,"color":"#141414","italic":true,"text":"n"},{"bold":true,"color":"#181818","italic":true,"text":"g"},{"bold":true,"color":"#1C1C1C","italic":true,"text":"!"},{"bold":true,"color":"#202020","italic":true,"text":" "},{"color":"#E65C00","text":"#"},{"color":"#CC5200","text":"n"},{"color":"#B34700","text":"e"},{"color":"#993D00","text":"k"},{"color":"#803300","text":"t"},{"color":"#662900","text":"4"},{"color":"#4C1F00","text":"r"}]],container=[
+{slot:0,item:{id:"elytra",count:1,components:{custom_name:[{"color":"#E0E0FF","text":"М"},{"color":"#C0C0FF","text":"н"},{"color":"#A0A0FF","text":"е"},{"color":"#8080FF","text":" "},{"color":"#6060FF","text":"б"},{"color":"#4040FF","text":"ы"},{"color":"#2020FF","text":" "},{"color":"#0000FF","text":"л"},{"color":"#2000E0","text":"е"},{"color":"#4000C0","text":"т"},{"color":"#6000A0","text":"а"},{"color":"#800080","text":"т"},{"color":"#A00060","text":"ь"},{"color":"#C00040","text":"!"}],enchantments:{unbreaking:255,mending:255,protection:25,thorns:25},max_stack_size:99}}},
+{slot:1,item:{id:"firework_rocket",count:99,components:{custom_name:[{"color":"#800080","text":"Д"},{"color":"#700070","text":"о"},{"color":"#600060","text":"л"},{"color":"#500050","text":"г"},{"color":"#400040","text":"и"},{"color":"#300030","text":"й"},{"color":"#200020","text":" "},{"color":"#100010","text":"ф"},{"color":"#000000","text":"е"},{"color":"#100010","text":"е"},{"color":"#200020","text":"р"},{"color":"#300030","text":"в"},{"color":"#400040","text":"е"},{"color":"#500050","text":"р"},{"color":"#600060","text":"к"}],max_stack_size:99,enchantments:{protection:10,mending:10,unbreaking:10,sharpness:10,fortune:10,looting:10,lunge:10,efficiency:10,density:10,feather_falling:10},consumable:{},fireworks:{flight_duration:10}}}},
+{slot:2,item:{id:"gray_stained_glass_pane",count:1,components:{max_stack_size:1}}},
+{slot:3,item:{id:"netherite_sword",count:99,components:{custom_name:[{"color":"#FF0000","text":"i"},{"color":"#DD0000","text":" "},{"color":"#BB0000","text":"c"},{"color":"#990000","text":"h"},{"color":"#770000","text":"e"},{"color":"#550000","text":"a"},{"color":"#330000","text":"t"},{"color":"#110000","text":" "},{"color":"#000000","text":"y"},{"color":"#220000","text":"e"},{"color":"#440000","text":"s"}],enchantments:{sharpness:10,unbreaking:255,mending:255,looting:15,fire_aspect:10},max_stack_size:99}}},
+{slot:4,item:{id:"netherite_helmet",count:99,components:{custom_name:[{"color":"#FFFFFF","text":"Н"},{"color":"#DDDDDD","text":"е"},{"color":"#BBBBBB","text":"з"},{"color":"#999999","text":"е"},{"color":"#777777","text":"р"},{"color":"#555555","text":"и"},{"color":"#333333","text":"т"},{"color":"#111111","text":"о"},{"color":"#000000","text":"в"},{"color":"#222222","text":"ы"},{"color":"#444444","text":"й"},{"color":"#666666","text":" "},{"color":"#888888","text":"ш"},{"color":"#AAAAAA","text":"л"},{"color":"#CCCCCC","text":"е"},{"color":"#EEEEEE","text":"м"},{"color":"#FFFFFF","text":" "},{"color":"#DDDDDD","text":"б"},{"color":"#BBBBBB","text":"е"},{"color":"#999999","text":"с"},{"color":"#777777","text":"с"},{"color":"#555555","text":"т"},{"color":"#333333","text":"ы"},{"color":"#111111","text":"ж"},{"color":"#000000","text":"е"},{"color":"#222222","text":"г"},{"color":"#444444","text":"о"},{"color":"#666666","text":" "},{"color":"#888888","text":"Н"},{"color":"#AAAAAA","text":"е"},{"color":"#CCCCCC","text":"к"},{"color":"#EEEEEE","text":"т"},{"color":"#FFFFFF","text":"а"},{"color":"#DDDDDD","text":"р"},{"color":"#BBBBBB","text":"а"}],enchantments:{protection:10,respiration:10,aqua_affinity:10,thorns:10,unbreaking:255,mending:255},max_stack_size:99}}},
+{slot:5,item:{id:"mace",count:99,components:{max_stack_size:99,enchantments:{density:5,breach:4,wind_burst:3,unbreaking:255,mending:255,sharpness:10,efficiency:10,fortune:10,looting:10}}}},
+{slot:6,item:{id:"gray_stained_glass_pane",count:1,components:{max_stack_size:1}}},
+{slot:7,item:{id:"enchanted_golden_apple",count:99,components:{max_stack_size:99}}},
+{slot:8,item:{id:"ender_pearl",count:99,components:{max_stack_size:99,enchantments:{sharpness:255,lunge:255,mending:255,unbreaking:255,efficiency:255,wind_burst:255,density:255,breach:255}}}},
+{slot:9,item:{id:"gray_stained_glass_pane",count:1,components:{max_stack_size:1}}},
+{slot:10,item:{id:"gray_stained_glass_pane",count:1,components:{max_stack_size:1}}},
+{slot:11,item:{id:"gray_stained_glass_pane",count:1,components:{max_stack_size:1}}},
+{slot:12,item:{id:"netherite_boots",count:99,components:{custom_name:[{"color":"#FFFFFF","text":"Н"},{"color":"#DDDDDD","text":"е"},{"color":"#BBBBBB","text":"з"},{"color":"#999999","text":"е"},{"color":"#777777","text":"р"},{"color":"#555555","text":"и"},{"color":"#333333","text":"т"},{"color":"#111111","text":"о"},{"color":"#000000","text":"в"},{"color":"#222222","text":"ы"},{"color":"#444444","text":"е"},{"color":"#666666","text":" "},{"color":"#888888","text":"б"},{"color":"#AAAAAA","text":"о"},{"color":"#CCCCCC","text":"т"},{"color":"#EEEEEE","text":"и"},{"color":"#FFFFFF","text":"н"},{"color":"#DDDDDD","text":"к"},{"color":"#BBBBBB","text":"и"},{"color":"#999999","text":" "},{"color":"#777777","text":"б"},{"color":"#555555","text":"е"},{"color":"#333333","text":"с"},{"color":"#111111","text":"с"},{"color":"#000000","text":"т"},{"color":"#222222","text":"ы"},{"color":"#444444","text":"ж"},{"color":"#666666","text":"е"},{"color":"#888888","text":"г"},{"color":"#AAAAAA","text":"о"},{"color":"#CCCCCC","text":" "},{"color":"#EEEEEE","text":"Н"},{"color":"#FFFFFF","text":"е"},{"color":"#DDDDDD","text":"к"},{"color":"#BBBBBB","text":"т"},{"color":"#999999","text":"а"},{"color":"#777777","text":"р"},{"color":"#555555","text":"а"}],enchantments:{soul_speed:5,protection:10,feather_falling:50,thorns:10,frost_walker:5,unbreaking:255,mending:255},max_stack_size:99}}},
+{slot:13,item:{id:"totem_of_undying",count:99,components:{custom_name:[{"color":"#FF0000","text":"I"},{"color":"#DD0000","text":" "},{"color":"#BB0000","text":"a"},{"color":"#990000","text":"l"},{"color":"#770000","text":"w"},{"color":"#550000","text":"a"},{"color":"#330000","text":"y"},{"color":"#110000","text":"s"},{"color":"#000000","text":" "},{"color":"#220000","text":"c"},{"color":"#440000","text":"o"},{"color":"#660000","text":"m"},{"color":"#880000","text":"e"},{"color":"#AA0000","text":" "},{"color":"#CC0000","text":"b"},{"color":"#EE0000","text":"a"},{"color":"#FF0000","text":"c"},{"color":"#DD0000","text":"k"},{"color":"#BB0000","text":"..."}],max_stack_size:99,enchantments:{protection:10}}}},
+{slot:14,item:{id:"netherite_chestplate",count:1,components:{custom_name:[{"color":"#FFFFFF","text":"Н"},{"color":"#DDDDDD","text":"е"},{"color":"#BBBBBB","text":"з"},{"color":"#999999","text":"е"},{"color":"#777777","text":"р"},{"color":"#555555","text":"и"},{"color":"#333333","text":"т"},{"color":"#111111","text":"о"},{"color":"#000000","text":"в"},{"color":"#222222","text":"ы"},{"color":"#444444","text":"й"},{"color":"#666666","text":" "},{"color":"#888888","text":"н"},{"color":"#AAAAAA","text":"а"},{"color":"#CCCCCC","text":"г"},{"color":"#EEEEEE","text":"р"},{"color":"#FFFFFF","text":"у"},{"color":"#DDDDDD","text":"д"},{"color":"#BBBBBB","text":"н"},{"color":"#999999","text":"и"},{"color":"#777777","text":"к"},{"color":"#555555","text":" "},{"color":"#333333","text":"б"},{"color":"#111111","text":"е"},{"color":"#000000","text":"с"},{"color":"#222222","text":"с"},{"color":"#444444","text":"т"},{"color":"#666666","text":"ы"},{"color":"#888888","text":"ж"},{"color":"#AAAAAA","text":"е"},{"color":"#CCCCCC","text":"г"},{"color":"#EEEEEE","text":"о"},{"color":"#FFFFFF","text":" "},{"color":"#DDDDDD","text":"Н"},{"color":"#BBBBBB","text":"е"},{"color":"#999999","text":"к"},{"color":"#777777","text":"т"},{"color":"#555555","text":"а"},{"color":"#333333","text":"р"},{"color":"#111111","text":"а"}],enchantments:{protection:10,thorns:10,unbreaking:255,mending:255},max_stack_size:99}}},
+{slot:15,item:{id:"gray_stained_glass_pane",count:1,components:{max_stack_size:1}}},
+{slot:16,item:{id:"gray_stained_glass_pane",count:1,components:{max_stack_size:1}}},
+{slot:17,item:{id:"gray_stained_glass_pane",count:1,components:{max_stack_size:1}}},
+{slot:18,item:{id:"bundle",count:1,components:{custom_name:[{"text":"🔧 Админский набор","color":"red","bold":true}],lore:[[{"text":"Бедрок, Барьер, КБ","color":"gray"}]],bundle_contents:[
+{id:"bedrock",count:64},
+{id:"barrier",count:64},
+{id:"command_block",count:64},
+{id:"repeating_command_block",count:64}
+]}}},
+{slot:19,item:{id:"gray_stained_glass_pane",count:1,components:{max_stack_size:1}}},
+{slot:20,item:{id:"gray_stained_glass_pane",count:1,components:{max_stack_size:1}}},
+{slot:21,item:{id:"netherite_spear",count:99,components:{custom_name:[{"color":"#FFFFFF","text":"Т"},{"color":"#DDDDDD","text":"а"},{"color":"#BBBBBB","text":"р"},{"color":"#999999","text":"г"},{"color":"#777777","text":"е"},{"color":"#555555","text":"т"},{"color":"#333333","text":" "},{"color":"#111111","text":"в"},{"color":"#000000","text":"о"},{"color":"#222222","text":"з"},{"color":"#444444","text":"д"},{"color":"#666666","text":"у"},{"color":"#888888","text":"х"},{"color":"#AAAAAA","text":"а"}],max_stack_size:99,enchantments:{sharpness:255,lunge:3,mending:255,unbreaking:255,efficiency:255}}}},
+{slot:22,item:{id:"netherite_leggings",count:99,components:{custom_name:[{"color":"#FFFFFF","text":"Н"},{"color":"#DDDDDD","text":"е"},{"color":"#BBBBBB","text":"з"},{"color":"#999999","text":"е"},{"color":"#777777","text":"р"},{"color":"#555555","text":"и"},{"color":"#333333","text":"т"},{"color":"#111111","text":"о"},{"color":"#000000","text":"в"},{"color":"#222222","text":"ы"},{"color":"#444444","text":"е"},{"color":"#666666","text":" "},{"color":"#888888","text":"п"},{"color":"#AAAAAA","text":"о"},{"color":"#CCCCCC","text":"н"},{"color":"#EEEEEE","text":"о"},{"color":"#FFFFFF","text":"ж"},{"color":"#DDDDDD","text":"и"},{"color":"#BBBBBB","text":" "},{"color":"#999999","text":"б"},{"color":"#777777","text":"е"},{"color":"#555555","text":"с"},{"color":"#333333","text":"с"},{"color":"#111111","text":"т"},{"color":"#000000","text":"ы"},{"color":"#222222","text":"ж"},{"color":"#444444","text":"е"},{"color":"#666666","text":"г"},{"color":"#888888","text":"о"},{"color":"#AAAAAA","text":" "},{"color":"#CCCCCC","text":"Н"},{"color":"#EEEEEE","text":"е"},{"color":"#FFFFFF","text":"к"},{"color":"#DDDDDD","text":"т"},{"color":"#BBBBBB","text":"а"},{"color":"#999999","text":"р"},{"color":"#777777","text":"а"}],enchantments:{swift_sneak:5,protection:10,thorns:10,unbreaking:255,mending:255},max_stack_size:99}}},
+{slot:23,item:{id:"netherite_pickaxe",count:99,components:{custom_name:[{"color":"#AAFFFF","text":"к"},{"color":"#88FFFF","text":"о"},{"color":"#66FFFF","text":"п"},{"color":"#44FFFF","text":"а"},{"color":"#22FFFF","text":"т"},{"color":"#00FFFF","text":"ы"},{"color":"#00DDDD","text":"ч"}],enchantments:{efficiency:255,fortune:50,unbreaking:255,mending:255},max_stack_size:99}}},
+{slot:24,item:{id:"gray_stained_glass_pane",count:1,components:{max_stack_size:1}}},
+{slot:25,item:{id:"gray_stained_glass_pane",count:1,components:{max_stack_size:1}}},
+{slot:26,item:{id:"bundle",count:1,components:{custom_name:[{"text":"💰 Мешок с незеритом","color":"dark_gray","bold":true}],lore:[[{"text":"64 стака незерит блоков","color":"gray"}]],bundle_contents:[
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64},
+{id:"netherite_block",count:64}
+]}}}
+],max_stack_size:99,enchantments={protection:10,mending:10,unbreaking:10,sharpness:10,fortune:10,looting:10,lunge:10,efficiency:10,density:10,feather_falling:10}] 1`
         }, {
             id: 'dildo-yuli',
             icon: '🍆',
@@ -302,7 +396,6 @@ equip_sound:"ambient.cave"
             command: '⏳ Эта паста ещё не готова. Загляни позже.'
         }];
 
-        // === Генерация карточек ===
         const grid = document.getElementById('pastaGrid');
         pastas.forEach(pasta => {
             const card = document.createElement('div');
@@ -318,7 +411,6 @@ equip_sound:"ambient.cave"
             grid.appendChild(card);
         });
 
-        // === Модалка ===
         const modalOverlay = document.getElementById('pastaModal');
         const modalTitle = document.getElementById('modalTitle');
         const modalCommand = document.getElementById('modalCommand');
@@ -347,7 +439,6 @@ equip_sound:"ambient.cave"
             if (e.key === 'Escape') closeModal();
         });
 
-        // === Копирование ===
         copyBtn.addEventListener('click', () => {
             const text = modalCommand.textContent;
             if (navigator.clipboard) {
@@ -357,9 +448,6 @@ equip_sound:"ambient.cave"
                 });
             }
         });
-
-        // === Прелоад картинок (если будут) ===
-        // (опционально)
     </script>
 </body>
 </html>
