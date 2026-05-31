@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEKT4R | Pasta</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: default;
+        }
+
+        body {
+            background: #0a0a0a;
+            min-height: 100vh;
+            font-family: 'Inter', system-ui, sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #8b5cf6, #d946ef);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            color: #888;
+            margin-top: 8px;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .card {
+            background: rgba(20, 20, 30, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 24px 20px;
+            text-align: center;
+            transition: 0.25s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .card .name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: white;
+        }
+
+        .card .desc {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 6px;
+        }
+
+        .card .badge {
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 0.6rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            color: #8b5cf6;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(14px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: #111;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal h2 {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            color: #eee;
+        }
+
+        .modal .command-box {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #ccc;
+            text-align: left;
+            word-break: break-word;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 16px 0;
+        }
+
+        .modal .copy-btn {
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 6px;
+        }
+
+        .modal .copy-btn:hover {
+            background: #7b4ce6;
+            transform: scale(1.02);
+        }
+
+        .modal .close-btn {
+            margin-top: 14px;
+            background: transparent;
+            border: 1px solid #444;
+            color: #999;
+            padding: 6px 20px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .modal .close-btn:hover {
+            border-color: #8b5cf6;
+            color: #eee;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: #1a1a1a;
+            backdrop-filter: blur(10px);
+            padding: 12px 24px;
+            border-radius: 40px;
+            border: 1px solid #8b5cf6;
+            color: #ddd;
+            opacity: 0;
+            transition: 0.4s ease;
+            z-index: 99999;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media (max-width: 500px) {
+            .header h1 { font-size: 2rem; }
+            .grid { grid-template-columns: 1fr; }
+            .modal { padding: 20px; }
+            .modal .command-box { font-size: 0.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>NEKT4R / PASTA</h1>
+        <p>выбери пасту — скопируй одним кликом</p>
+    </div>
+
+    <div class="grid" id="pastaGrid">
+        <!-- Карточки генерируются через JS -->
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="pastaModal">
+        <div class="modal">
+            <h2 id="modalTitle">Название</h2>
+            <div class="command-box" id="modalCommand"></div>
+            <button class="copy-btn" id="copyBtn">📋 Скопировать</button>
+            <button class="close-btn" id="closeModalBtn">Закрыть</button>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">📋 Скопировано!</div>
+
+    <script>
+        // === Данные паст ===
+        const pastas = [{
+            id: 'nekt4r-5k-kit',
+            icon: '🔮',
+            name: 'NEKT4R 5K KIT',
+            desc: 'Редкий набор для выживания',
+            badge: '5K',
+            command: '/give @p minecraft:netherite_chestplate[custom_name={"text":"NEKT4R 5K","color":"#8b5cf6","italic":false},enchantments={binding_curse:67},attribute_modifiers=[{id:"my_custom_speed",type:"movement_speed",amount:0.03,operation:"add_value",slot:"chest"}],equippable={slot:"chest",equip_sound:"ambient.cave"}] 1'
+        }, {
+            id: 'dildo-yuli',
+            icon: '🍆',
+            name: 'Дилдо Юли',
+            desc: 'Проклятое дилдо юли',
+            badge: 'LEGENDARY',
+            command: `/give @p minecraft:prismarine_shard[item_model=end_rod,custom_name={"text":"Проклятое дилдо юли","color":"dark_red","italic":false},enchantments={binding_curse:67},attribute_modifiers=[
+{id:"my_custom_speed",type:"movement_speed",amount:-0.03000000149011612,operation:"add_value",slot:"legs"},
+{id:"my_custom_jump",type:"jump_strength",amount:-0.11999998688697815,operation:"add_value",slot:"legs"}
+],equippable={
+slot:"legs",
+equip_sound:"ambient.cave"
+},lore=[
+{"text":"⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬜⬜⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬛⬜⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬜⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬛⬛⬜⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬜⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬜⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬜⬜⬜⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬜⬜⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬜⬛⬛⬛⬛⬛⬛⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛⬜⬛⬛⬛⬛⬛⬛⬜⬛⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬛⬛⬛⬜⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬜⬛⬛⬜⬛⬛⬜⬜⬜⬛⬛⬛⬛⬛⬛⬜⬜⬜⬛⬛⬜⬛⬛⬜⬜⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬛⬛⬛⬛⬜⬛⬛⬜⬜⬜⬛⬛⬛⬛⬛⬛⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬛⬛⬛⬛⬛⬛⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬜⬜⬜⬛⬛⬛⬛⬛⬛⬜⬜⬜⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬜⬛⬛⬜⬛⬜⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬜⬛⬜⬛⬛⬜⬜⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬛⬛⬜⬛⬜⬛⬛⬜⬛⬛⬜⬛⬛⬜⬛⬛⬜⬛⬜⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜⬛⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜","color":"white","italic":false},
+{"text":"оно не очень подходит...","color":"dark_purple","italic":true}
+]] 1`
+        }, {
+            id: 'in-dev',
+            icon: '🚧',
+            name: 'В разработке',
+            desc: 'Скоро здесь появится что-то новое',
+            badge: 'SOON',
+            command: '⏳ Эта паста ещё не готова. Загляни позже.'
+        }];
+
+        // === Генерация карточек ===
+        const grid = document.getElementById('pastaGrid');
+        pastas.forEach(pasta => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.dataset.id = pasta.id;
+            card.innerHTML = `
+                <div class="icon">${pasta.icon}</div>
+                <div class="name">${pasta.name}</div>
+                <div class="desc">${pasta.desc}</div>
+                <div class="badge">${pasta.badge}</div>
+            `;
+            card.addEventListener('click', () => openModal(pasta.id));
+            grid.appendChild(card);
+        });
+
+        // === Модалка ===
+        const modalOverlay = document.getElementById('pastaModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalCommand = document.getElementById('modalCommand');
+        const copyBtn = document.getElementById('copyBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const toast = document.getElementById('toast');
+
+        function openModal(id) {
+            const pasta = pastas.find(p => p.id === id);
+            if (!pasta) return;
+            modalTitle.textContent = pasta.name;
+            modalCommand.textContent = pasta.command;
+            modalOverlay.classList.add('active');
+            modalCommand.scrollTop = 0;
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+        }
+
+        closeModalBtn.addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) closeModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // === Копирование ===
+        copyBtn.addEventListener('click', () => {
+            const text = modalCommand.textContent;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    toast.classList.add('show');
+                    setTimeout(() => toast.classList.remove('show'), 2200);
+                });
+            }
+        });
+
+        // === Прелоад картинок (если будут) ===
+        // (опционально)
+    </script>
+</body>
+</html>
