@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crownlands | Minecraft</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            min-height: 100vh;
+            font-family: 'Inter', system-ui, sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-image: radial-gradient(circle at 20% 30%, #1a0a2e 0%, #0a0a0a 70%);
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* === HEADER === */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffd700, #ff6b00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+        .header p {
+            color: #aaa;
+            font-size: 1.2rem;
+            margin-top: 8px;
+        }
+        .header .tag {
+            display: inline-block;
+            background: rgba(255, 215, 0, 0.15);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #ffd700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 12px;
+        }
+
+        /* === GRID — две колонки === */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            width: 100%;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(20, 20, 30, 0.5);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 24px;
+            transition: 0.25s;
+        }
+        .card:hover {
+            border-color: #ffd700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+        }
+        .card h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ffd700;
+            margin-bottom: 12px;
+        }
+        .card p, .card li {
+            color: #ccc;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .card ul {
+            list-style: none;
+            padding: 0;
+        }
+        .card ul li {
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .card ul li:last-child {
+            border-bottom: none;
+        }
+        .card .label {
+            font-size: 0.7rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 12px;
+        }
+
+        /* === DISCORD WIDGET === */
+        .discord-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .discord-wrapper iframe {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(88, 101, 242, 0.15);
+        }
+
+        /* === BUTTONS === */
+        .button-group {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .btn {
+            padding: 12px 30px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: 0.2s;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: #ffd700;
+            color: #0a0a0a;
+        }
+        .btn-primary:hover {
+            background: #ffcc00;
+            transform: scale(1.02);
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid #555;
+            color: #ccc;
+        }
+        .btn-secondary:hover {
+            border-color: #ffd700;
+            color: #ffd700;
+        }
+
+        /* === MODS === */
+        .mods-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-top: 10px;
+        }
+        .mod-item {
+            background: rgba(255,255,255,0.04);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .mod-item .name {
+            font-weight: 500;
+            color: white;
+        }
+        .mod-item .desc {
+            font-size: 0.7rem;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        /* === FOOTER === */
+        .footer {
+            margin-top: 30px;
+            font-size: 0.7rem;
+            color: #555;
+            text-align: center;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .footer a {
+            color: #ffd700;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            .discord-wrapper iframe {
+                width: 100% !important;
+                height: 400px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>⚔️ Crownlands</h1>
+            <p>Minecraft сервер на 1.21.11 Fabric</p>
+            <div class="tag">🎭 CPM / EmoteCraft / Simple Voice Chat</div>
+        </div>
+
+        <!-- TWO COLUMNS -->
+        <div class="grid">
+            <div class="card">
+                <h2>👑 О сервере</h2>
+                <p>
+                    Crownlands — это ванильный+ сервер с упором на атмосферу, ролевую игру и кастомные возможности.
+                    Мы используем Fabric 1.21.11, чтобы ты мог наслаждаться стабильной работой и современными механиками.
+                </p>
+                <div class="label">🌍 Версия</div>
+                <p style="margin-top: 4px;">1.21.11 Fabric</p>
+            </div>
+            <div class="card">
+                <h2>🎭 Рекомендуемые моды</h2>
+                <p>Для полного погружения советуем установить:</p>
+                <div class="mods-grid">
+                    <div class="mod-item">
+                        <div class="name">Customizable Player Models</div>
+                        <div class="desc">кастомные скины и эмоции</div>
+                    </div>
+                    <div class="mod-item">
+                        <div class="name">EmoteCraft</div>
+                        <div class="desc">эмодзи и анимации</div>
+                    </div>
+                    <div class="mod-item">
+                        <div class="name">Simple Voice Chat</div>
+                        <div class="desc">голосовой чат в игре</div>
+                    </div>
+                </div>
+                <div class="label">🔧 Оптимально с Fabric API</div>
+            </div>
+        </div>
+
+        <!-- DISCORD WIDGET -->
+        <div class="discord-wrapper">
+            <iframe src="https://discord.com/widget?id=1444588847340978269&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="button-group">
+            <a href="https://discord.gg/cW8fhVpB" class="btn btn-primary">💬 Присоединиться к Discord</a>
+            <a href="#" class="btn btn-secondary">📥 Скачать моды (скоро)</a>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            Crownlands × NEKT4R.INK • 2026
+        </div>
+    </div>
+</body>
+</html>
