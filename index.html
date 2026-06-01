@@ -25,24 +25,35 @@
             overflow-x: hidden;
         }
 
-        /* === CUSTOM CURSOR — исправлен === */
+        /* === MATRIX BACKGROUND === */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.08;
+        }
+
+        /* === CUSTOM CURSOR === */
         #c-dot {
             position: fixed;
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             background: white;
             border-radius: 50%;
             pointer-events: none;
             z-index: 999999;
             transform: translate(-50%, -50%);
-            transition: width 0.15s, height 0.15s;
-            will-change: transform;
+            transition: width 0.1s, height 0.1s;
         }
         #c-ring {
             position: fixed;
-            width: 40px;
-            height: 40px;
-            border: 2px solid #4ade80;
+            width: 30px;
+            height: 30px;
+            border: 1.5px solid #4ade80;
             border-radius: 50%;
             pointer-events: none;
             z-index: 999998;
@@ -52,8 +63,8 @@
             will-change: transform;
         }
         #c-ring.hover {
-            width: 56px;
-            height: 56px;
+            width: 50px;
+            height: 50px;
             border-color: #4ade80;
             box-shadow: 0 0 40px rgba(74, 222, 128, 0.3);
         }
@@ -273,101 +284,23 @@
             opacity: 1;
         }
 
-        /* === DISCORD CARD (вместо старого статуса) === */
+        /* === DISCORD WIDGET === */
         .discord-section {
             width: 100%;
             margin-bottom: 60px;
             padding: 40px;
             border-top: 1px solid rgba(255,255,255,0.06);
             border-bottom: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            justify-content: center;
         }
-        #discord-card {
-            background: rgba(20, 20, 30, 0.5);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.06);
+        .discord-widget {
             border-radius: 16px;
-            padding: 20px;
-            max-width: 400px;
-            margin: 0 auto;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(88, 101, 242, 0.1);
         }
-        .discord-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .discord-avatar-container {
-            position: relative;
-            width: 60px;
-            height: 60px;
-        }
-        #discord-avatar {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        #discord-status-dot {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            border: 2px solid #0a0a0a;
-            transition: background 0.3s;
-        }
-        #discord-status-dot.online { background: #3ba55c; }
-        #discord-status-dot.idle { background: #faa61a; }
-        #discord-status-dot.dnd { background: #ed4245; }
-        #discord-status-dot.offline { background: #747f8d; }
-        .discord-username {
-            font-size: 1rem;
-            font-weight: 600;
-            color: white;
-        }
-        .discord-displayname {
-            font-size: 0.9rem;
-            color: #888;
-        }
-        .discord-activity {
-            margin-top: 10px;
-            padding: 10px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 8px;
-        }
-        .spotify-activity {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .spotify-info {
-            display: flex;
-            flex-direction: column;
-        }
-        .spotify-song {
-            font-weight: 500;
-            color: white;
-        }
-        .spotify-artist {
-            font-size: 0.8rem;
-            color: #888;
-        }
-        .game-activity {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .game-name {
-            font-weight: 500;
-            color: white;
-        }
-        .discord-bio {
-            margin-top: 10px;
-            font-size: 0.8rem;
-            color: #888;
-            padding: 10px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 8px;
+        .discord-widget iframe {
+            display: block;
         }
 
         /* === CARD SECTION — слайдер === */
@@ -378,7 +311,7 @@
         .card {
             width: 100%;
             background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255,255,255,0.06);
             border-radius: 12px;
             padding: 30px;
             text-align: center;
@@ -603,14 +536,14 @@
             .hero-subtitle { font-size: 1rem; }
             .hero-right { width: 100%; }
             .discord-section { padding: 20px; }
-            #discord-card { max-width: 100%; }
+            .discord-widget iframe { width: 100% !important; height: 400px !important; }
             .footer { flex-direction: column; align-items: flex-start; gap: 10px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- MATRIX BACKGROUND (опционально) -->
+    <!-- MATRIX BACKGROUND -->
     <canvas id="matrix-canvas"></canvas>
 
     <!-- CURSOR -->
@@ -654,7 +587,7 @@
                     Каждый оттенок — это шаг к пониманию себя.
                 </p>
                 <div class="hero-buttons">
-                    <button class="hero-btn primary" id="scrollToStatus">ПОЧУВСТВОВАТЬ СОСТОЯНИЕ</button>
+                    <button class="hero-btn primary" id="openSitesModal">ПРОСМОТРЕТЬ САЙТЫ</button>
                 </div>
             </div>
             <div class="hero-right">
@@ -665,25 +598,10 @@
             </div>
         </section>
 
-        <!-- DISCORD SECTION — вместо старого статуса -->
+        <!-- DISCORD WIDGET SECTION -->
         <section class="discord-section">
-            <div id="discord-card">
-                <div class="discord-header">
-                    <div class="discord-avatar-container">
-                        <img id="discord-avatar" src="" alt="Avatar">
-                        <div id="discord-status-dot" class="status-dot online"></div>
-                    </div>
-                    <div class="discord-info">
-                        <div class="discord-username">nekt4r_ink</div>
-                        <div class="discord-displayname">✦ хоцу выстрел</div>
-                    </div>
-                </div>
-                <div class="discord-activity" id="discord-activity">
-                    <!-- Сюда подгрузится активность -->
-                </div>
-                <div class="discord-bio" id="discord-bio">
-                    ʚїɞ
-                </div>
+            <div class="discord-widget">
+                <iframe src="https://discord.com/widget?id=1444588847340978269&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
             </div>
         </section>
 
@@ -706,6 +624,45 @@
             </div>
         </section>
     </main>
+
+    <!-- SITES MODAL (список всех страниц) -->
+    <div class="modal-overlay" id="sitesModal">
+        <div class="modal-card">
+            <h2>✦ Сайты ✦</h2>
+            <div class="modal-btn-group">
+                <a href="index.html" class="modal-btn" style="background:#4ade80; text-decoration:none; color:#0a0a0a;">
+                    🌐 Главная страница
+                </a>
+                <a href="content/" class="modal-btn" style="background:#8b5cf6; text-decoration:none;">
+                    🎨 Контент
+                </a>
+                <a href="pastas.html" class="modal-btn" style="background:#d946ef; text-decoration:none;">
+                    🍝 Пасты
+                </a>
+                <button class="modal-btn" id="noreturnBtn" style="background:#ff4444; color:#fff;">
+                    ⚠️ Точка невозврата
+                </button>
+            </div>
+            <button class="modal-close" id="closeSitesModalBtn">Закрыть</button>
+        </div>
+    </div>
+
+    <!-- NORETURN CONFIRM MODAL -->
+    <div class="modal-overlay" id="noreturnConfirmModal">
+        <div class="modal-card">
+            <h2>⚠️ Осторожно!</h2>
+            <p style="color:#ccc; margin-bottom: 20px; line-height: 1.6;">
+                Вы можете <span style="color:#ff4444; font-weight:600;">не вернуться</span>.<br>
+                Это точка невозврата. Ты уверен?
+            </p>
+            <div class="modal-btn-group">
+                <button class="modal-btn" id="confirmNoreturnBtn" style="background:#ff4444; color:#fff;" disabled>
+                    Продолжить <span id="countdownTimer">(3)</span>
+                </button>
+                <button class="modal-close" id="cancelNoreturnBtn">Отмена</button>
+            </div>
+        </div>
+    </div>
 
     <!-- CONTACT MODAL -->
     <div class="modal-overlay" id="contactModal">
@@ -754,7 +711,7 @@
 
     <script>
         (function() {
-            // === MATRIX BACKGROUND (опционально) ===
+            // === MATRIX BACKGROUND ===
             const canvas = document.getElementById('matrix-canvas');
             if (canvas) {
                 const ctx = canvas.getContext('2d');
@@ -816,7 +773,7 @@
             const phraseEl = document.getElementById('randomPhrase');
             phraseEl.innerHTML = '✦ <span>' + phrases[Math.floor(Math.random() * phrases.length)] + '</span>';
 
-            // === CURSOR — ИСПРАВЛЕННЫЙ ===
+            // === CURSOR ===
             const dot = document.getElementById('c-dot');
             const ring = document.getElementById('c-ring');
             let mouseX = -100, mouseY = -100;
@@ -876,140 +833,84 @@
             }
             document.addEventListener('click', initAudio);
 
-            // === SCROLL TO STATUS ===
-            document.getElementById('scrollToStatus').addEventListener('click', () => {
-                document.getElementById('discord-section').scrollIntoView({ behavior: 'smooth' });
-            });
+            // === SITES MODAL ===
+            const sitesModal = document.getElementById('sitesModal');
+            const openSitesBtn = document.getElementById('openSitesModal');
+            const closeSitesBtn = document.getElementById('closeSitesModalBtn');
+            const noreturnBtn = document.getElementById('noreturnBtn');
 
-            // === CARD FLASH ===
-            const card = document.getElementById('card');
-            card.addEventListener('click', () => {
-                card.classList.remove('flash');
-                void card.offsetWidth;
-                card.classList.add('flash');
-            });
-
-            // === PHOTO SLIDER ===
-            const images = document.querySelectorAll('.photo-slider img');
-            const dots = document.querySelectorAll('.photo-dot');
-            let currentPhoto = 0;
-            let autoSlideInterval = null;
-
-            function showPhoto(index) {
-                images.forEach(img => img.classList.remove('active'));
-                dots.forEach(dot => dot.classList.remove('active'));
-                images[index].classList.add('active');
-                dots[index].classList.add('active');
-                currentPhoto = index;
+            function openSites() {
+                sitesModal.classList.add('active');
+                stopAutoSlide();
             }
 
-            function nextPhoto() {
-                const next = (currentPhoto + 1) % images.length;
-                showPhoto(next);
+            function closeSites() {
+                sitesModal.classList.remove('active');
+                startAutoSlide();
             }
 
-            function startAutoSlide() {
-                if (autoSlideInterval) clearInterval(autoSlideInterval);
-                autoSlideInterval = setInterval(nextPhoto, 4000);
-            }
-
-            function stopAutoSlide() {
-                if (autoSlideInterval) {
-                    clearInterval(autoSlideInterval);
-                    autoSlideInterval = null;
-                }
-            }
-
-            dots.forEach((dot, index) => {
-                dot.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    stopAutoSlide();
-                    showPhoto(index);
-                    startAutoSlide();
-                });
+            openSitesBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openSites();
             });
 
-            images.forEach((img, index) => {
-                img.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    stopAutoSlide();
-                    const next = (index + 1) % images.length;
-                    showPhoto(next);
-                    startAutoSlide();
-                });
+            closeSitesBtn.addEventListener('click', closeSites);
+            sitesModal.addEventListener('click', (e) => {
+                if (e.target === sitesModal) closeSites();
             });
 
-            startAutoSlide();
+            // === NORETURN CONFIRM ===
+            const noreturnConfirmModal = document.getElementById('noreturnConfirmModal');
+            const confirmNoreturnBtn = document.getElementById('confirmNoreturnBtn');
+            const cancelNoreturnBtn = document.getElementById('cancelNoreturnBtn');
+            const countdownTimer = document.getElementById('countdownTimer');
+            let countdownInterval = null;
+            let countdown = 3;
 
-            // === DISCORD LANYARD ===
-            const DISCORD_ID = '1383104235255894109';
-            // Подключаемся к Lanyard
-            function connectLanyard() {
-                const script = document.createElement('script');
-                script.src = 'https://cdn.jsdelivr.net/npm/@zaycation/lanyard/dist/lanyard.js';
-                script.onload = function() {
-                    if (typeof Lanyard !== 'undefined') {
-                        Lanyard.connect(DISCORD_ID);
-                        Lanyard.on("data", (data) => {
-                            console.log(data);
-                            updateDiscordCard(data);
-                        });
+            function openNoreturnConfirm() {
+                noreturnConfirmModal.classList.add('active');
+                stopAutoSlide();
+                countdown = 3;
+                countdownTimer.textContent = `(${countdown})`;
+                confirmNoreturnBtn.disabled = true;
+                if (countdownInterval) clearInterval(countdownInterval);
+                countdownInterval = setInterval(() => {
+                    countdown--;
+                    countdownTimer.textContent = `(${countdown})`;
+                    if (countdown === 0) {
+                        clearInterval(countdownInterval);
+                        countdownInterval = null;
+                        confirmNoreturnBtn.disabled = false;
+                        countdownTimer.textContent = '';
                     }
-                };
-                document.head.appendChild(script);
+                }, 1000);
             }
 
-            function updateDiscordCard(data) {
-                // Аватар
-                const avatarUrl = `https://cdn.discordapp.com/avatars/${data.discord_user.id}/${data.discord_user.avatar}.png`;
-                document.getElementById('discord-avatar').src = avatarUrl;
-
-                // Никнейм и отображаемое имя
-                document.getElementById('discord-username').textContent = data.discord_user.username;
-                document.getElementById('discord-displayname').textContent = data.discord_user.display_name || data.discord_user.username;
-
-                // Статус
-                const status = data.discord_status;
-                const statusDot = document.getElementById('discord-status-dot');
-                statusDot.className = 'status-dot';
-                if (status === 'online') statusDot.classList.add('online');
-                else if (status === 'idle') statusDot.classList.add('idle');
-                else if (status === 'dnd') statusDot.classList.add('dnd');
-                else statusDot.classList.add('offline');
-
-                // Активность (Spotify / игра)
-                const activityContainer = document.getElementById('discord-activity');
-                const activity = data.activities?.find(a => a.type === 0); // Игра или Spotify
-
-                if (activity) {
-                    if (activity.name === 'Spotify') {
-                        activityContainer.innerHTML = `
-                            <div class="spotify-activity">
-                                <div class="spotify-icon">🎵</div>
-                                <div class="spotify-info">
-                                    <div class="spotify-song">${activity.details}</div>
-                                    <div class="spotify-artist">${activity.state}</div>
-                                </div>
-                            </div>
-                        `;
-                    } else {
-                        activityContainer.innerHTML = `
-                            <div class="game-activity">
-                                <div class="game-icon">🎮</div>
-                                <div class="game-name">${activity.name}</div>
-                            </div>
-                        `;
-                    }
-                } else {
-                    activityContainer.innerHTML = '';
+            function closeNoreturnConfirm() {
+                noreturnConfirmModal.classList.remove('active');
+                startAutoSlide();
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
                 }
-
-                // Био
-                const bio = data.discord_user.bio || '';
-                document.getElementById('discord-bio').textContent = bio;
+                confirmNoreturnBtn.disabled = true;
             }
 
-            connectLanyard();
+            noreturnBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeSites();
+                openNoreturnConfirm();
+            });
+
+            cancelNoreturnBtn.addEventListener('click', closeNoreturnConfirm);
+            noreturnConfirmModal.addEventListener('click', (e) => {
+                if (e.target === noreturnConfirmModal) closeNoreturnConfirm();
+            });
+
+            confirmNoreturnBtn.addEventListener('click', () => {
+                closeNoreturnConfirm();
+                window.location.href = 'noreturn.html';
+            });
 
             // === CONTACT MODAL ===
             const contactModal = document.getElementById('contactModal');
