@@ -181,7 +181,7 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
-            margin-bottom: 60px;
+            margin-bottom: 40px;
             gap: 40px;
         }
         .hero-left {
@@ -224,29 +224,6 @@
             line-height: 1.6;
             margin-bottom: 30px;
         }
-        .hero-buttons {
-            display: flex;
-            gap: 16px;
-        }
-        .hero-btn {
-            padding: 10px 28px;
-            border-radius: 4px;
-            font-weight: 600;
-            font-size: 0.8rem;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            text-decoration: none;
-            transition: 0.2s;
-            border: none;
-            cursor: pointer;
-        }
-        .hero-btn.primary {
-            background: #4ade80;
-            color: #0a0a0a;
-        }
-        .hero-btn.primary:hover {
-            background: #3bce6e;
-        }
         .hero-right {
             flex: 1;
             display: flex;
@@ -284,10 +261,55 @@
             opacity: 1;
         }
 
+        /* === CROWNLANDS AD === */
+        .ad-section {
+            width: 100%;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(20, 20, 30, 0.3);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            border-radius: 16px;
+            text-align: center;
+            backdrop-filter: blur(4px);
+        }
+        .ad-section h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffd700, #ff6b00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+        .ad-section p {
+            color: #aaa;
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+        .ad-section .btn {
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        .ad-section .btn-primary {
+            background: #ffd700;
+            color: #0a0a0a;
+        }
+        .ad-section .btn-primary:hover {
+            background: #ffcc00;
+            transform: scale(1.02);
+        }
+
         /* === DISCORD WIDGET === */
         .discord-section {
             width: 100%;
-            margin-bottom: 60px;
+            margin-bottom: 40px;
             padding: 40px;
             border-top: 1px solid rgba(255,255,255,0.06);
             border-bottom: 1px solid rgba(255,255,255,0.06);
@@ -586,9 +608,6 @@
                     Этот сайт — не просто статус. Это пульс, настроение, отражение того, что внутри.
                     Каждый оттенок — это шаг к пониманию себя.
                 </p>
-                <div class="hero-buttons">
-                    <button class="hero-btn primary" id="openSitesModal">ПРОСМОТРЕТЬ САЙТЫ</button>
-                </div>
             </div>
             <div class="hero-right">
                 <div class="hero-image-container">
@@ -598,7 +617,14 @@
             </div>
         </section>
 
-        <!-- DISCORD WIDGET SECTION -->
+        <!-- CROWNLANDS AD -->
+        <section class="ad-section">
+            <h2>👑 Crownlands</h2>
+            <p>Minecraft сервер 1.21.11 Fabric • CPM / EmoteCraft / Simple Voice Chat</p>
+            <a href="/crownlands" class="btn btn-primary">Интересно</a>
+        </section>
+
+        <!-- DISCORD WIDGET -->
         <section class="discord-section">
             <div class="discord-widget">
                 <iframe src="https://discord.com/widget?id=1444588847340978269&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
@@ -624,45 +650,6 @@
             </div>
         </section>
     </main>
-
-    <!-- SITES MODAL (список всех страниц) -->
-    <div class="modal-overlay" id="sitesModal">
-        <div class="modal-card">
-            <h2>✦ Сайты ✦</h2>
-            <div class="modal-btn-group">
-                <a href="index.html" class="modal-btn" style="background:#4ade80; text-decoration:none; color:#0a0a0a;">
-                    🌐 Главная страница
-                </a>
-                <a href="content/" class="modal-btn" style="background:#8b5cf6; text-decoration:none;">
-                    🎨 Контент
-                </a>
-                <a href="pastas.html" class="modal-btn" style="background:#d946ef; text-decoration:none;">
-                    🍝 Пасты
-                </a>
-                <button class="modal-btn" id="noreturnBtn" style="background:#ff4444; color:#fff;">
-                    ⚠️ Точка невозврата
-                </button>
-            </div>
-            <button class="modal-close" id="closeSitesModalBtn">Закрыть</button>
-        </div>
-    </div>
-
-    <!-- NORETURN CONFIRM MODAL -->
-    <div class="modal-overlay" id="noreturnConfirmModal">
-        <div class="modal-card">
-            <h2>⚠️ Осторожно!</h2>
-            <p style="color:#ccc; margin-bottom: 20px; line-height: 1.6;">
-                Вы можете <span style="color:#ff4444; font-weight:600;">не вернуться</span>.<br>
-                Это точка невозврата. Ты уверен?
-            </p>
-            <div class="modal-btn-group">
-                <button class="modal-btn" id="confirmNoreturnBtn" style="background:#ff4444; color:#fff;" disabled>
-                    Продолжить <span id="countdownTimer">(3)</span>
-                </button>
-                <button class="modal-close" id="cancelNoreturnBtn">Отмена</button>
-            </div>
-        </div>
-    </div>
 
     <!-- CONTACT MODAL -->
     <div class="modal-overlay" id="contactModal">
@@ -832,85 +819,6 @@
                 } catch (e) {}
             }
             document.addEventListener('click', initAudio);
-
-            // === SITES MODAL ===
-            const sitesModal = document.getElementById('sitesModal');
-            const openSitesBtn = document.getElementById('openSitesModal');
-            const closeSitesBtn = document.getElementById('closeSitesModalBtn');
-            const noreturnBtn = document.getElementById('noreturnBtn');
-
-            function openSites() {
-                sitesModal.classList.add('active');
-                stopAutoSlide();
-            }
-
-            function closeSites() {
-                sitesModal.classList.remove('active');
-                startAutoSlide();
-            }
-
-            openSitesBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                openSites();
-            });
-
-            closeSitesBtn.addEventListener('click', closeSites);
-            sitesModal.addEventListener('click', (e) => {
-                if (e.target === sitesModal) closeSites();
-            });
-
-            // === NORETURN CONFIRM ===
-            const noreturnConfirmModal = document.getElementById('noreturnConfirmModal');
-            const confirmNoreturnBtn = document.getElementById('confirmNoreturnBtn');
-            const cancelNoreturnBtn = document.getElementById('cancelNoreturnBtn');
-            const countdownTimer = document.getElementById('countdownTimer');
-            let countdownInterval = null;
-            let countdown = 3;
-
-            function openNoreturnConfirm() {
-                noreturnConfirmModal.classList.add('active');
-                stopAutoSlide();
-                countdown = 3;
-                countdownTimer.textContent = `(${countdown})`;
-                confirmNoreturnBtn.disabled = true;
-                if (countdownInterval) clearInterval(countdownInterval);
-                countdownInterval = setInterval(() => {
-                    countdown--;
-                    countdownTimer.textContent = `(${countdown})`;
-                    if (countdown === 0) {
-                        clearInterval(countdownInterval);
-                        countdownInterval = null;
-                        confirmNoreturnBtn.disabled = false;
-                        countdownTimer.textContent = '';
-                    }
-                }, 1000);
-            }
-
-            function closeNoreturnConfirm() {
-                noreturnConfirmModal.classList.remove('active');
-                startAutoSlide();
-                if (countdownInterval) {
-                    clearInterval(countdownInterval);
-                    countdownInterval = null;
-                }
-                confirmNoreturnBtn.disabled = true;
-            }
-
-            noreturnBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                closeSites();
-                openNoreturnConfirm();
-            });
-
-            cancelNoreturnBtn.addEventListener('click', closeNoreturnConfirm);
-            noreturnConfirmModal.addEventListener('click', (e) => {
-                if (e.target === noreturnConfirmModal) closeNoreturnConfirm();
-            });
-
-            confirmNoreturnBtn.addEventListener('click', () => {
-                closeNoreturnConfirm();
-                window.location.href = 'noreturn.html';
-            });
 
             // === CONTACT MODAL ===
             const contactModal = document.getElementById('contactModal');
