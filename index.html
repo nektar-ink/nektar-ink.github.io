@@ -2,8 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEKT4R.INK</title>
+    <title id="dynamicTitle">!?@&#%$^</title>
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
     <style>
         * {
@@ -25,8 +24,8 @@
             overflow-x: hidden;
         }
 
-        /* === MATRIX BACKGROUND === */
-        #matrix-canvas {
+        /* === ЗВЁЗДНЫЙ ФОН === */
+        #stars-canvas {
             position: fixed;
             top: 0;
             left: 0;
@@ -34,7 +33,6 @@
             height: 100%;
             z-index: 0;
             pointer-events: none;
-            opacity: 0.08;
         }
 
         /* === CUSTOM CURSOR === */
@@ -53,20 +51,45 @@
             position: fixed;
             width: 30px;
             height: 30px;
-            border: 1.5px solid #4ade80;
+            border: 1.5px solid #8b5cf6;
             border-radius: 50%;
             pointer-events: none;
             z-index: 999998;
             transform: translate(-50%, -50%);
             transition: all 0.15s ease-out;
-            box-shadow: 0 0 20px rgba(74, 222, 128, 0.15);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
             will-change: transform;
         }
         #c-ring.hover {
             width: 50px;
             height: 50px;
-            border-color: #4ade80;
-            box-shadow: 0 0 40px rgba(74, 222, 128, 0.3);
+            border-color: #d946ef;
+            box-shadow: 0 0 40px rgba(217, 70, 239, 0.3);
+        }
+
+        /* === LOADER === */
+        #loader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0a0a0a;
+            transition: opacity 0.6s ease;
+        }
+        #loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #loader img {
+            width: 80px;
+            height: 80px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* === HEADER === */
@@ -77,27 +100,17 @@
             padding: 20px 40px;
             width: 100%;
             max-width: 1280px;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
             position: relative;
             z-index: 10;
         }
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .logo-dot {
-            width: 8px;
-            height: 8px;
-            background: #4ade80;
-            border-radius: 50%;
-            display: inline-block;
-        }
         .logo {
             font-weight: 700;
-            font-size: 1.1rem;
+            font-size: 1.5rem;
             letter-spacing: -0.5px;
             color: white;
+        }
+        .logo span {
+            color: #8b5cf6;
         }
         .version {
             font-family: 'JetBrains Mono', monospace;
@@ -107,47 +120,6 @@
             padding: 2px 8px;
             border-radius: 30px;
             border: 1px solid #2a2a2a;
-            margin-left: 8px;
-        }
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-        }
-        .nav-links {
-            display: flex;
-            gap: 24px;
-            list-style: none;
-            font-size: 0.7rem;
-            font-weight: 500;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        .nav-links a {
-            color: #888;
-            text-decoration: none;
-            transition: 0.2s;
-        }
-        .nav-links a:hover {
-            color: #4ade80;
-        }
-        .header-btn {
-            background: #4ade80;
-            color: #0a0a0a;
-            padding: 8px 20px;
-            border-radius: 4px;
-            font-weight: 600;
-            font-size: 0.7rem;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            text-decoration: none;
-            transition: 0.2s;
-            border: none;
-            cursor: pointer;
-        }
-        .header-btn:hover {
-            background: #3bce6e;
-            transform: scale(1.02);
         }
 
         /* === MAIN CONTENT === */
@@ -160,19 +132,10 @@
             align-items: center;
             position: relative;
             z-index: 5;
+            display: none;
         }
-
-        /* === RANDOM PHRASE === */
-        .random-phrase {
-            font-size: 0.8rem;
-            color: #555;
-            text-align: center;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-        .random-phrase span {
-            color: #4ade80;
+        .app.visible {
+            display: flex;
         }
 
         /* === HERO SECTION === */
@@ -193,9 +156,9 @@
         .hero-tag {
             font-size: 0.65rem;
             letter-spacing: 2px;
-            color: #4ade80;
+            color: #8b5cf6;
             text-transform: uppercase;
-            border: 1px solid rgba(74, 222, 128, 0.3);
+            border: 1px solid rgba(139, 92, 246, 0.3);
             padding: 4px 12px;
             border-radius: 4px;
             margin-bottom: 20px;
@@ -208,7 +171,7 @@
             letter-spacing: -1px;
         }
         .hero-title .highlight {
-            color: #4ade80;
+            color: #8b5cf6;
         }
         .hero-subtitle {
             font-size: 1.2rem;
@@ -230,535 +193,145 @@
             justify-content: center;
             align-items: center;
         }
-        .hero-image-container {
-            position: relative;
+        .hero-image {
             width: 100%;
             max-width: 500px;
             border-radius: 12px;
-            overflow: hidden;
-        }
-        .hero-image-container img {
-            width: 100%;
-            display: block;
             object-fit: cover;
-            transition: opacity 0.6s ease;
-        }
-        .hero-image-container img.default {
-            position: relative;
-            z-index: 1;
-        }
-        .hero-image-container img.hover {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 2;
-            opacity: 0;
-        }
-        .hero-image-container:hover img.default {
-            opacity: 0;
-        }
-        .hero-image-container:hover img.hover {
-            opacity: 1;
+            border: 1px solid rgba(139, 92, 246, 0.1);
         }
 
-        /* === CROWNLANDS AD === */
-        .ad-section {
+        /* === RANDOM QUOTE === */
+        .quote-section {
             width: 100%;
-            margin-bottom: 40px;
-            padding: 20px;
-            background: rgba(20, 20, 30, 0.3);
-            border: 1px solid rgba(255, 215, 0, 0.15);
-            border-radius: 16px;
             text-align: center;
-            backdrop-filter: blur(4px);
-        }
-        .ad-section h2 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #ffd700, #ff6b00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
-            margin-bottom: 8px;
-        }
-        .ad-section p {
-            color: #aaa;
-            font-size: 0.95rem;
-            margin-bottom: 16px;
-        }
-        .ad-section .btn {
-            display: inline-block;
-            padding: 10px 30px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: 0.2s;
-            border: none;
-            cursor: pointer;
-        }
-        .ad-section .btn-primary {
-            background: #ffd700;
-            color: #0a0a0a;
-        }
-        .ad-section .btn-primary:hover {
-            background: #ffcc00;
-            transform: scale(1.02);
-        }
-
-        /* === DISCORD WIDGET === */
-        .discord-section {
-            width: 100%;
-            margin-bottom: 40px;
-            padding: 40px;
+            padding: 20px 0;
             border-top: 1px solid rgba(255,255,255,0.06);
             border-bottom: 1px solid rgba(255,255,255,0.06);
-            display: flex;
-            justify-content: center;
+            margin-bottom: 40px;
         }
-        .discord-widget {
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 0 40px rgba(88, 101, 242, 0.1);
-        }
-        .discord-widget iframe {
-            display: block;
-        }
-
-        /* === CARD SECTION — слайдер === */
-        .card-section {
-            width: 100%;
-            margin-bottom: 60px;
-        }
-        .card {
-            width: 100%;
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 12px;
-            padding: 30px;
-            text-align: center;
-            transition: box-shadow 0.3s;
-        }
-        .card.flash {
-            animation: cardFlash 0.6s ease;
-        }
-        @keyframes cardFlash {
-            0% { box-shadow: 0 0 0 rgba(74, 222, 128, 0); }
-            30% { box-shadow: 0 0 80px rgba(74, 222, 128, 0.4), inset 0 0 40px rgba(74, 222, 128, 0.1); }
-            100% { box-shadow: 0 0 0 rgba(74, 222, 128, 0); }
-        }
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 0 5px;
-        }
-        .card-label {
-            font-size: 0.65rem;
-            letter-spacing: 2px;
-            color: #4ade80;
-            text-transform: uppercase;
-        }
-        .photo-slider {
-            position: relative;
-            width: 100%;
-            overflow: hidden;
-            border-radius: 12px;
-        }
-        .photo-slider img {
-            width: 100%;
-            display: block;
-            object-fit: cover;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: opacity 0.4s ease;
-            opacity: 0;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-        .photo-slider img.active {
-            position: relative;
-            opacity: 1;
-        }
-        .photo-dots {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        .photo-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #333;
-            border: 1px solid #555;
-            transition: 0.3s;
-        }
-        .photo-dot.active {
-            background: #4ade80;
-            border-color: #4ade80;
-            box-shadow: 0 0 15px rgba(74, 222, 128, 0.3);
-        }
-        .photo-dot:hover {
-            background: #4ade80;
-        }
-
-        /* === MODALS — единая структура === */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(14px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            padding: 20px;
-        }
-        .modal-overlay.active {
-            display: flex;
-        }
-        .modal-card {
-            background: #111;
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 16px;
-            padding: 40px;
-            max-width: 420px;
-            width: 100%;
-            text-align: center;
-        }
-        .modal-card h2 {
-            color: #eee;
-            font-weight: 400;
-            margin-bottom: 25px;
-            font-size: 1.5rem;
-        }
-        .modal-btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        .modal-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 14px 20px;
-            border-radius: 60px;
-            font-weight: 600;
-            font-size: 1.05rem;
-            border: none;
-            transition: 0.2s;
-            color: #fff;
-            text-decoration: none;
-        }
-        .modal-btn.discord {
-            background: #5865F2;
-        }
-        .modal-btn.discord:hover {
-            background: #4752c4;
-            transform: scale(1.02);
-        }
-        .modal-btn.telegram {
-            background: #0088cc;
-        }
-        .modal-btn.telegram:hover {
-            background: #0077b3;
-            transform: scale(1.02);
-        }
-        .modal-close {
-            margin-top: 24px;
-            background: transparent;
-            border: 1px solid #444;
-            color: #999;
-            padding: 8px 28px;
-            border-radius: 40px;
-            font-size: 0.9rem;
-            transition: 0.2s;
-        }
-        .modal-close:hover {
-            border-color: #4ade80;
-            color: #eee;
-        }
-
-        /* === TOAST === */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(80px);
-            background: #1a1a1a;
-            backdrop-filter: blur(10px);
-            padding: 14px 30px;
-            border-radius: 60px;
-            border: 1px solid #4ade80;
-            color: #ddd;
-            opacity: 0;
-            transition: 0.4s ease;
-            z-index: 99999;
-        }
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        /* === FOOTER === */
-        .footer {
-            width: 100%;
-            max-width: 1280px;
-            padding: 30px 40px;
-            border-top: 1px solid rgba(255,255,255,0.06);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            font-size: 0.6rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        .footer-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #555;
-        }
-        .footer-left .dot {
-            width: 6px;
-            height: 6px;
-            background: #4ade80;
-            border-radius: 50%;
-        }
-        .footer-left .name {
-            color: white;
-            font-weight: 500;
-        }
-        .footer-right {
-            display: flex;
-            gap: 20px;
-            color: #555;
-        }
-        .footer-right a {
-            color: #555;
-            text-decoration: none;
-            transition: 0.2s;
-        }
-        .footer-right a:hover {
-            color: #4ade80;
+        .quote-section .quote {
+            font-size: 1.2rem;
+            color: #ccc;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            line-height: 1.5;
         }
 
         @media (max-width: 768px) {
-            .header { padding: 15px 20px; flex-wrap: wrap; gap: 10px; }
-            .header-right { gap: 12px; }
-            .nav-links { display: none; }
+            .header { padding: 15px 20px; }
             .app { padding: 30px 20px; }
-            .hero { flex-direction: column; align-items: flex-start; }
+            .hero { flex-direction: column; }
             .hero-title { font-size: 2.5rem; }
-            .hero-subtitle { font-size: 1rem; }
             .hero-right { width: 100%; }
-            .discord-section { padding: 20px; }
-            .discord-widget iframe { width: 100% !important; height: 400px !important; }
-            .footer { flex-direction: column; align-items: flex-start; gap: 10px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- MATRIX BACKGROUND -->
-    <canvas id="matrix-canvas"></canvas>
+    <!-- LOADER -->
+    <div id="loader">
+        <img src="assets/loading.png" alt="Loading">
+    </div>
+
+    <!-- ЗВЁЗДНЫЙ ФОН -->
+    <canvas id="stars-canvas"></canvas>
 
     <!-- CURSOR -->
     <div id="c-dot"></div>
     <div id="c-ring"></div>
 
-    <!-- TOAST -->
-    <div class="toast" id="toast">📋 copied: zhenya_cerebro</div>
-
     <!-- HEADER -->
     <header class="header">
-        <div class="header-left">
-            <span class="logo-dot"></span>
-            <span class="logo">NEKT4R.INK</span>
-            <span class="version">v3.37</span>
-        </div>
-        <div class="header-right">
-            <ul class="nav-links">
-                <li><a href="#" id="contactLink">CONTACT</a></li>
-            </ul>
-            <button class="header-btn" id="supportBtn">GET UNFAIR PRISM KIT</button>
-        </div>
+        <div class="logo">NEKT<span>4</span>R<span>.</span>INK <span class="version">v3.37</span></div>
     </header>
 
     <!-- MAIN CONTENT -->
-    <main class="app">
-        <!-- RANDOM PHRASE -->
-        <div class="random-phrase" id="randomPhrase">✦ <span>загрузка</span> ...</div>
-
-        <!-- HERO SECTION -->
+    <main class="app" id="mainContent">
+        <!-- HERO -->
         <section class="hero">
             <div class="hero-left">
-                <div class="hero-tag">✦ состояние нектара</div>
+                <div class="hero-tag">✦ добро пожаловать</div>
                 <h1 class="hero-title">
-                    Внутри каждого из нас <span class="highlight">огонь</span>.<br>
-                    Вопрос лишь в том, <span class="highlight">горит</span> он или <span class="highlight">тлеет</span>.
+                    Здесь начинается <span class="highlight">космос</span>
                 </h1>
-                <div class="hero-subtitle">Твой статус — твоя энергия. Выбери цвет и почувствуй.</div>
+                <div class="hero-subtitle">Этот сайт — твой выбор. Каждый оттенок — это шаг к пониманию себя</div>
                 <p class="hero-desc">
-                    Этот сайт — не просто статус. Это пульс, настроение, отражение того, что внутри.
-                    Каждый оттенок — это шаг к пониманию себя.
+                    Здесь нет правильных ответов. Есть только ты и твой выбор. Всё остальное — шум
                 </p>
             </div>
             <div class="hero-right">
-                <div class="hero-image-container">
-                    <img src="assets/image-11.png" class="default" alt="Nektar default">
-                    <img src="assets/image-12.png" class="hover" alt="Nektar hover">
-                </div>
+                <img src="assets/chief.jpg" class="hero-image" alt="Chief">
             </div>
         </section>
 
-        <!-- CROWNLANDS AD -->
-        <section class="ad-section">
-            <h2>👑 Crownlands</h2>
-            <p>Minecraft сервер 1.21.11 Fabric • CPM / EmoteCraft / Simple Voice Chat</p>
-            <a href="/crownlands" class="btn btn-primary">Интересно</a>
-        </section>
-
-        <!-- DISCORD WIDGET -->
-        <section class="discord-section">
-            <div class="discord-widget">
-                <iframe src="https://discord.com/widget?id=1444588847340978269&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
-            </div>
-        </section>
-
-        <!-- CARD SECTION — слайдер -->
-        <section class="card-section">
-            <div class="card" id="card">
-                <div class="card-header">
-                    <span class="card-label">✦ человек, который вас поддержит</span>
-                </div>
-                <div class="photo-slider" id="photoSlider">
-                    <img src="assets/nektar.jpg" class="active" data-index="0" alt="Agent 1">
-                    <img src="assets/fuck.jpg" data-index="1" alt="Agent 2">
-                    <img src="assets/aboba.jpg" data-index="2" alt="Agent 3">
-                </div>
-                <div class="photo-dots" id="photoDots">
-                    <span class="photo-dot active" data-index="0"></span>
-                    <span class="photo-dot" data-index="1"></span>
-                    <span class="photo-dot" data-index="2"></span>
-                </div>
-            </div>
+        <!-- RANDOM QUOTE -->
+        <section class="quote-section">
+            <div class="quote" id="randomQuote">—</div>
         </section>
     </main>
 
-    <!-- CONTACT MODAL -->
-    <div class="modal-overlay" id="contactModal">
-        <div class="modal-card">
-            <h2>✦ connect ✦</h2>
-            <div class="modal-btn-group">
-                <button class="modal-btn discord" id="discordBtn">
-                    <span>💬</span> Discord
-                </button>
-                <a href="https://t.me/sasibakas1" target="_blank" class="modal-btn telegram">
-                    <span>✈️</span> Telegram
-                </a>
-            </div>
-            <button class="modal-close" id="closeModalBtn">close</button>
-        </div>
-    </div>
-
-    <!-- SUPPORT MODAL (для kit) -->
-    <div class="modal-overlay" id="supportModal">
-        <div class="modal-card">
-            <h2>✦ connect ✦</h2>
-            <div class="modal-btn-group">
-                <button class="modal-btn discord" id="discordBtnSupport">
-                    <span>💬</span> Discord
-                </button>
-                <a href="https://t.me/sasibakas1" target="_blank" class="modal-btn telegram">
-                    <span>✈️</span> Telegram
-                </a>
-            </div>
-            <button class="modal-close" id="closeModalBtnSupport">close</button>
-        </div>
-    </div>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="footer-left">
-            <span class="dot"></span>
-            <span class="name">NEKT4R.INK</span>
-            <span>• 2026 • educational hacking only • DE</span>
-        </div>
-        <div class="footer-right">
-            <a href="#">DISCORD</a>
-            <a href="#">CONTACT</a>
-        </div>
-    </footer>
+    <!-- ФОНОВАЯ МУЗЫКА (ЛОКАЛЬНО) -->
+    <audio id="bg-music" loop>
+        <source src="assets/ambient.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
         (function() {
-            // === MATRIX BACKGROUND ===
-            const canvas = document.getElementById('matrix-canvas');
-            if (canvas) {
-                const ctx = canvas.getContext('2d');
-                let w, h;
+            // === АНИМИРОВАННЫЙ TITLE ===
+            const titleEl = document.getElementById('dynamicTitle');
+            const symbols = '!?@&#%$^';
+            let frame = 0;
 
-                function resizeCanvas() {
-                    w = canvas.width = window.innerWidth;
-                    h = canvas.height = window.innerHeight;
+            function animateTitle() {
+                let newText = '';
+                for (let i = 0; i < 7; i++) {
+                    newText += symbols[Math.floor(Math.random() * symbols.length)];
                 }
-                resizeCanvas();
-                window.addEventListener('resize', resizeCanvas);
+                titleEl.textContent = newText;
+                setTimeout(animateTitle, 200);
+            }
+            animateTitle();
 
-                const symbols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}:<>?';
-                const columns = Math.floor(w / 20);
-                const drops = [];
-                for (let i = 0; i < columns; i++) {
-                    drops[i] = Math.floor(Math.random() * h / 20);
-                }
+            // === ЗВЁЗДНЫЙ ФОН ===
+            const canvas = document.getElementById('stars-canvas');
+            const ctx = canvas.getContext('2d');
+            let w, h;
+            const stars = [];
 
-                function drawMatrix() {
-                    ctx.fillStyle = 'rgba(10, 10, 10, 0.05)';
-                    ctx.fillRect(0, 0, w, h);
-                    ctx.fillStyle = '#4ade80';
-                    ctx.font = '16px monospace';
-                    for (let i = 0; i < columns; i++) {
-                        const char = symbols[Math.floor(Math.random() * symbols.length)];
-                        ctx.fillText(char, i * 20, drops[i] * 20);
-                        if (drops[i] * 20 > h && Math.random() > 0.975) {
-                            drops[i] = 0;
-                        }
-                        drops[i]++;
-                    }
-                    requestAnimationFrame(drawMatrix);
-                }
-                drawMatrix();
+            function resizeCanvas() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            for (let i = 0; i < 200; i++) {
+                stars.push({
+                    x: Math.random() * w,
+                    y: Math.random() * h,
+                    r: Math.random() * 1.5 + 0.5,
+                    a: Math.random() * 0.8 + 0.2,
+                    dx: (Math.random() - 0.5) * 0.3,
+                    dy: (Math.random() - 0.5) * 0.3
+                });
             }
 
-            // === RANDOM PHRASE ===
-            const phrases = [
-                "ты здесь",
-                "погнали",
-                "ой всё",
-                "не спи",
-                "семь пятниц",
-                "ждун",
-                "спокойной ночи",
-                "доброе утро",
-                "work hard, play hard",
-                "минута тишины",
-                "поехали",
-                "на связи",
-                "держи в курсе",
-                "всё будет норм",
-                "не дрейфь",
-                "врубайся",
-                "ощути момент",
-                "чувствуй ритм"
-            ];
-            const phraseEl = document.getElementById('randomPhrase');
-            phraseEl.innerHTML = '✦ <span>' + phrases[Math.floor(Math.random() * phrases.length)] + '</span>';
+            function drawStars() {
+                ctx.clearRect(0, 0, w, h);
+                stars.forEach(s => {
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${s.a})`;
+                    ctx.fill();
+                    s.x += s.dx;
+                    s.y += s.dy;
+                    if (s.x < 0 || s.x > w) s.dx *= -1;
+                    if (s.y < 0 || s.y > h) s.dy *= -1;
+                });
+                requestAnimationFrame(drawStars);
+            }
+            drawStars();
 
             // === CURSOR ===
             const dot = document.getElementById('c-dot');
@@ -781,7 +354,6 @@
                     ringY = y;
                     ringActive = true;
                 }
-                initAudio();
             }
 
             document.addEventListener('mousemove', updateCursor);
@@ -799,113 +371,58 @@
             }
             animateRing();
 
-            document.querySelectorAll('.header-btn, .hero-btn, .modal-btn, .modal-close, .logo, .photo-dot').forEach(el => {
+            document.querySelectorAll('.logo').forEach(el => {
                 el.addEventListener('mouseenter', () => ring.classList.add('hover'));
                 el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
             });
 
-            // === AUDIO ===
-            let audioInitialized = false;
-            let audioElement = null;
+            // === LOADER ===
+            const loader = document.getElementById('loader');
+            const mainContent = document.getElementById('mainContent');
 
-            function initAudio() {
-                if (audioInitialized) return;
-                audioInitialized = true;
-                try {
-                    audioElement = new Audio('https://stream.zeno.fm/0r0xa792kwzuv');
-                    audioElement.loop = true;
-                    audioElement.volume = 0.6;
-                    audioElement.play().catch(() => {});
-                } catch (e) {}
-            }
-            document.addEventListener('click', initAudio);
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                mainContent.classList.add('visible');
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 600);
+            }, 4000);
 
-            // === CONTACT MODAL ===
-            const contactModal = document.getElementById('contactModal');
-            const contactLink = document.getElementById('contactLink');
-            const closeModalBtn = document.getElementById('closeModalBtn');
-            const discordBtn = document.getElementById('discordBtn');
-            const toast = document.getElementById('toast');
+            // === RANDOM QUOTE ===
+            const quotes = [
+                'ты либо сгоришь, либо выйдешь из огня другим',
+                'никто не скажет тебе, что делать. ты решаешь сам',
+                'тишина здесь — это не пустота. это начало',
+                'иногда лучший способ понять себя — просто заткнуться и посмотреть',
+                'здесь нет правильных ответов. есть только ты и твой выбор',
+                'покажи, что ты есть. остальное — не твоя забота'
+            ];
 
-            function openContact() {
-                contactModal.classList.add('active');
-                stopAutoSlide();
-            }
+            const quoteEl = document.getElementById('randomQuote');
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            quoteEl.textContent = quotes[randomIndex];
 
-            function closeContact() {
-                contactModal.classList.remove('active');
-                startAutoSlide();
-            }
+            // === ФОНОВАЯ МУЗЫКА (ЛОКАЛЬНО) ===
+            const audio = document.getElementById('bg-music');
+            let audioPlayed = false;
 
-            contactLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                openContact();
-            });
-
-            closeModalBtn.addEventListener('click', closeContact);
-            contactModal.addEventListener('click', (e) => {
-                if (e.target === contactModal) closeContact();
-            });
-
-            // === DISCORD COPY (CONTACT) ===
-            discordBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const tag = 'zhenya_cerebro';
-                if (navigator.clipboard) {
-                    navigator.clipboard.writeText(tag).then(() => {
-                        toast.classList.add('show');
-                        setTimeout(() => toast.classList.remove('show'), 2400);
+            function playAudio() {
+                if (!audioPlayed) {
+                    audioPlayed = true;
+                    audio.play().catch(() => {
+                        // если браузер блокирует автозапуск, ничего страшного
                     });
                 }
-            });
-
-            // === SUPPORT MODAL ===
-            const supportModal = document.getElementById('supportModal');
-            const supportBtn = document.getElementById('supportBtn');
-            const closeModalBtnSupport = document.getElementById('closeModalBtnSupport');
-            const discordBtnSupport = document.getElementById('discordBtnSupport');
-
-            function openSupport() {
-                supportModal.classList.add('active');
-                stopAutoSlide();
             }
 
-            function closeSupport() {
-                supportModal.classList.remove('active');
-                startAutoSlide();
-            }
+            // пробуем запустить сразу при загрузке
+            playAudio();
 
-            supportBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                openSupport();
-            });
+            // если не сработало — запускаем по клику
+            document.addEventListener('click', playAudio, { once: true });
 
-            closeModalBtnSupport.addEventListener('click', closeSupport);
-            supportModal.addEventListener('click', (e) => {
-                if (e.target === supportModal) closeSupport();
-            });
-
-            // === DISCORD COPY (SUPPORT) ===
-            discordBtnSupport.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const tag = 'zhenya_cerebro';
-                if (navigator.clipboard) {
-                    navigator.clipboard.writeText(tag).then(() => {
-                        toast.classList.add('show');
-                        setTimeout(() => toast.classList.remove('show'), 2400);
-                    });
-                }
-            });
-
-            // === PRELOAD IMAGES ===
-            ['assets/image-11.png', 'assets/image-12.png', 'assets/nektar.jpg', 'assets/fuck.jpg', 'assets/aboba.jpg'].forEach(src => {
-                const img = new Image();
-                img.src = src;
-            });
-
-            // Фоновая музыка при клике
-            document.addEventListener('click', initAudio);
+            // также при наведении курсора (после загрузки)
+            document.addEventListener('mousemove', playAudio, { once: true });
 
         })();
     </script>
