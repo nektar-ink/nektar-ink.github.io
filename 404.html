@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 — не найдено</title>
+    <title>!?@&#%$^ · 404</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
     <style>
         * {
             margin: 0;
@@ -22,7 +23,6 @@
             padding: 20px;
         }
 
-        /* === ЗВЁЗДНЫЙ ФОН (точки как в Among Us) === */
         #stars-canvas {
             position: fixed;
             top: 0;
@@ -75,7 +75,6 @@
 </head>
 <body>
 
-    <!-- ЗВЁЗДНЫЙ ФОН (точки) -->
     <canvas id="stars-canvas"></canvas>
 
     <div class="container">
@@ -97,7 +96,6 @@
             resizeCanvas();
             window.addEventListener('resize', resizeCanvas);
 
-            // Генерация точек
             for (let i = 0; i < 200; i++) {
                 stars.push({
                     x: Math.random() * w,
