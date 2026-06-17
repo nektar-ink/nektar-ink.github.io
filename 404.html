@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — не найдено</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Inter', system-ui, sans-serif;
+            color: white;
+            padding: 20px;
+        }
+
+        /* === ЗВЁЗДНЫЙ ФОН (точки как в Among Us) === */
+        #stars-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .container h1 {
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: #eee;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .container .btn {
+            display: inline-block;
+            padding: 12px 40px;
+            background: white;
+            color: #0a0a0a;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .container .btn:hover {
+            transform: scale(1.02);
+            background: #eee;
+        }
+
+        @media (max-width: 500px) {
+            .container h1 { font-size: 1.2rem; }
+            .container .btn { padding: 10px 30px; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ЗВЁЗДНЫЙ ФОН (точки) -->
+    <canvas id="stars-canvas"></canvas>
+
+    <div class="container">
+        <h1>все дороги ведут в рим, но эта ссылка никуда не ведёт</h1>
+        <a href="/" class="btn">вернуться</a>
+    </div>
+
+    <script>
+        (function() {
+            const canvas = document.getElementById('stars-canvas');
+            const ctx = canvas.getContext('2d');
+            let w, h;
+            const stars = [];
+
+            function resizeCanvas() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            // Генерация точек
+            for (let i = 0; i < 200; i++) {
+                stars.push({
+                    x: Math.random() * w,
+                    y: Math.random() * h,
+                    r: Math.random() * 1.5 + 0.5,
+                    a: Math.random() * 0.8 + 0.2,
+                    dx: (Math.random() - 0.5) * 0.3,
+                    dy: (Math.random() - 0.5) * 0.3
+                });
+            }
+
+            function drawStars() {
+                ctx.clearRect(0, 0, w, h);
+                stars.forEach(s => {
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${s.a})`;
+                    ctx.fill();
+                    s.x += s.dx;
+                    s.y += s.dy;
+                    if (s.x < 0 || s.x > w) s.dx *= -1;
+                    if (s.y < 0 || s.y > h) s.dy *= -1;
+                });
+                requestAnimationFrame(drawStars);
+            }
+            drawStars();
+
+        })();
+    </script>
+</body>
+</html>
