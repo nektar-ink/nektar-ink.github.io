@@ -142,6 +142,12 @@
             letter-spacing: -1px;
             text-align: center;
             width: 100%;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.9; transform: scale(0.98); }
         }
 
         .hero-subtitle {
@@ -170,6 +176,13 @@
             border-radius: 12px;
             object-fit: cover;
             border: 1px solid rgba(139, 92, 246, 0.1);
+            animation: hologram 4s infinite alternate ease-in-out;
+        }
+
+        @keyframes hologram {
+            0% { filter: hue-rotate(0deg) brightness(1); opacity: 1; }
+            50% { filter: hue-rotate(10deg) brightness(1.1); opacity: 0.95; }
+            100% { filter: hue-rotate(-10deg) brightness(0.9); opacity: 0.9; }
         }
 
         .quote-section {
@@ -340,6 +353,26 @@
                     loader.style.display = 'none';
                 }, 600);
             }, loadTime);
+
+            // == звук при загрузке (7) ==
+            function playBootSound() {
+                try {
+                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(400, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.2);
+                    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.2);
+                } catch (e) {}
+            }
+
+            setTimeout(playBootSound, loadTime + 200);
 
             const quotes = [
                 'ты либо сгоришь, либо выйдешь из огня другим',
