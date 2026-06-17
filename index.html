@@ -143,9 +143,6 @@
             text-align: center;
             width: 100%;
         }
-        .animated-title .highlight {
-            color: #8b5cf6;
-        }
 
         .hero-subtitle {
             font-size: 1.2rem;
@@ -207,9 +204,7 @@
         <section class="hero">
             <div class="hero-left">
                 <div class="hero-tag">✦ добро пожаловать</div>
-                <h1 class="animated-title" id="animatedTitle">
-                    здесь начинается <span class="highlight">космос</span>
-                </h1>
+                <h1 class="animated-title" id="animatedTitle"></h1>
                 <div class="hero-subtitle">этот сайт — твой выбор. каждый оттенок — это шаг к пониманию себя</div>
                 <p class="hero-desc">
                     здесь нет правильных ответов. есть только ты и твой выбор. всё остальное — шум
@@ -220,9 +215,7 @@
             </div>
         </section>
 
-        <section class="quote-section" id="quoteContainer">
-            <!-- цитаты вставятся через js -->
-        </section>
+        <section class="quote-section" id="quoteContainer"></section>
     </main>
 
     <audio id="bg-music" loop>
@@ -231,7 +224,6 @@
 
     <script>
         (function() {
-            // === АНИМИРОВАННЫЙ TITLE (ВКЛАДКА) ===
             const titleEl = document.getElementById('dynamicTitle');
             const titleSymbols = '!?@&#%$^';
             function animateTitle() {
@@ -244,7 +236,6 @@
             }
             animateTitle();
 
-            // === АНИМИРОВАННЫЙ ЗАГОЛОВОК (НА СТРАНИЦЕ) ===
             const headerEl = document.getElementById('animatedTitle');
             const headerSymbols = '!?@&#%$^';
             function animateHeader() {
@@ -252,12 +243,11 @@
                 for (let i = 0; i < 7; i++) {
                     newText += headerSymbols[Math.floor(Math.random() * headerSymbols.length)];
                 }
-                headerEl.innerHTML = newText + ' <span class="highlight">космос</span>';
+                headerEl.textContent = newText;
                 setTimeout(animateHeader, 200);
             }
             animateHeader();
 
-            // === ЗВЁЗДНЫЙ ФОН ===
             const canvas = document.getElementById('stars-canvas');
             const ctx = canvas.getContext('2d');
             let w, h;
@@ -297,7 +287,6 @@
             }
             drawStars();
 
-            // === CURSOR ===
             const dot = document.getElementById('c-dot');
             const ring = document.getElementById('c-ring');
             let mouseX = -100, mouseY = -100;
@@ -340,11 +329,9 @@
                 el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
             });
 
-            // === LOADER с рандомным временем ===
             const loader = document.getElementById('loader');
             const mainContent = document.getElementById('mainContent');
-
-            const loadTime = Math.random() * 2500 + 1500; // от 1.5 до 4 сек
+            const loadTime = Math.random() * 2500 + 1500;
 
             setTimeout(() => {
                 loader.classList.add('hidden');
@@ -354,7 +341,6 @@
                 }, 600);
             }, loadTime);
 
-            // === 50 ЦИТАТ (ВСЕ ВИДНЫ, ГРАДИЕНТ ОТ БЕЛОГО ДО ЧЁРНОГО) ===
             const quotes = [
                 'ты либо сгоришь, либо выйдешь из огня другим',
                 'никто не скажет тебе, что делать. ты решаешь сам',
@@ -413,7 +399,6 @@
             quotes.forEach((q, index) => {
                 const p = document.createElement('p');
                 p.textContent = q;
-                // яркость плавно падает от 100% до 20%
                 const brightness = 100 - (index / quotes.length) * 80;
                 p.style.color = `rgb(${brightness}%, ${brightness}%, ${brightness}%)`;
                 p.style.fontSize = '1rem';
@@ -422,7 +407,6 @@
                 quoteContainer.appendChild(p);
             });
 
-            // === МУЗЫКА — ОБХОД БЛОКИРОВКИ ===
             const audio = document.getElementById('bg-music');
             let audioPlayed = false;
 
