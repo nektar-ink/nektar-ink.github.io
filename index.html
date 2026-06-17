@@ -1,4 +1,4 @@
-х<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -183,13 +183,6 @@
             border-bottom: 1px solid rgba(255,255,255,0.06);
             margin-bottom: 40px;
         }
-        .quote-section .quote {
-            font-size: 1.2rem;
-            font-weight: 300;
-            letter-spacing: 0.5px;
-            line-height: 1.5;
-            transition: color 0.3s ease;
-        }
 
         @media (max-width: 768px) {
             .app { padding: 30px 20px; }
@@ -227,8 +220,8 @@
             </div>
         </section>
 
-        <section class="quote-section">
-            <div class="quote" id="randomQuote">—</div>
+        <section class="quote-section" id="quoteContainer">
+            <!-- цитаты вставятся через js -->
         </section>
     </main>
 
@@ -259,7 +252,7 @@
                 for (let i = 0; i < 7; i++) {
                     newText += headerSymbols[Math.floor(Math.random() * headerSymbols.length)];
                 }
-                headerEl.textContent = newText + ' <span class="highlight">космос</span>';
+                headerEl.innerHTML = newText + ' <span class="highlight">космос</span>';
                 setTimeout(animateHeader, 200);
             }
             animateHeader();
@@ -361,7 +354,7 @@
                 }, 600);
             }, loadTime);
 
-            // === 50 ЦИТАТ С ГРАДИЕНТОМ ===
+            // === 50 ЦИТАТ (ВСЕ ВИДНЫ, ГРАДИЕНТ ОТ БЕЛОГО ДО ЧЁРНОГО) ===
             const quotes = [
                 'ты либо сгоришь, либо выйдешь из огня другим',
                 'никто не скажет тебе, что делать. ты решаешь сам',
@@ -414,11 +407,20 @@
                 'ты — не твои границы. ты — твой потенциал'
             ];
 
-            const quoteEl = document.getElementById('randomQuote');
-            const randomIndex = Math.floor(Math.random() * quotes.length);
-            const brightness = 100 - (randomIndex / quotes.length) * 100;
-            quoteEl.textContent = quotes[randomIndex];
-            quoteEl.style.color = `rgb(${brightness}%, ${brightness}%, ${brightness}%)`;
+            const quoteContainer = document.getElementById('quoteContainer');
+            quoteContainer.innerHTML = '';
+
+            quotes.forEach((q, index) => {
+                const p = document.createElement('p');
+                p.textContent = q;
+                // яркость плавно падает от 100% до 20%
+                const brightness = 100 - (index / quotes.length) * 80;
+                p.style.color = `rgb(${brightness}%, ${brightness}%, ${brightness}%)`;
+                p.style.fontSize = '1rem';
+                p.style.margin = '12px 0';
+                p.style.opacity = '1';
+                quoteContainer.appendChild(p);
+            });
 
             // === МУЗЫКА — ОБХОД БЛОКИРОВКИ ===
             const audio = document.getElementById('bg-music');
