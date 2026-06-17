@@ -2,7 +2,12 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="dynamicTitle">!?@&#%$^</title>
+    <meta name="title" content="NEKT4R.INK">
+    <meta name="description" content="nektar — космос, выбор, тишина. сайт о том, что внутри тебя.">
+    <meta name="keywords" content="нектар, nektar, космос, выбор, цитаты, сайт, личный">
+    <meta name="robots" content="index, follow">
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
     <style>
         * {
@@ -24,7 +29,6 @@
             overflow-x: hidden;
         }
 
-        /* === ЗВЁЗДНЫЙ ФОН === */
         #stars-canvas {
             position: fixed;
             top: 0;
@@ -35,7 +39,6 @@
             pointer-events: none;
         }
 
-        /* === CUSTOM CURSOR === */
         #c-dot {
             position: fixed;
             width: 6px;
@@ -67,7 +70,6 @@
             box-shadow: 0 0 40px rgba(217, 70, 239, 0.3);
         }
 
-        /* === LOADER === */
         #loader {
             position: fixed;
             inset: 0;
@@ -92,37 +94,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* === HEADER === */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 40px;
-            width: 100%;
-            max-width: 1280px;
-            position: relative;
-            z-index: 10;
-        }
-        .logo {
-            font-weight: 700;
-            font-size: 1.5rem;
-            letter-spacing: -0.5px;
-            color: white;
-        }
-        .logo span {
-            color: #8b5cf6;
-        }
-        .version {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            background: #1a1a1a;
-            color: #555;
-            padding: 2px 8px;
-            border-radius: 30px;
-            border: 1px solid #2a2a2a;
-        }
-
-        /* === MAIN CONTENT === */
         .app {
             width: 100%;
             max-width: 1280px;
@@ -138,7 +109,6 @@
             display: flex;
         }
 
-        /* === HERO SECTION === */
         .hero {
             display: flex;
             justify-content: space-between;
@@ -163,16 +133,20 @@
             border-radius: 4px;
             margin-bottom: 20px;
         }
-        .hero-title {
+
+        .animated-title {
             font-size: 4rem;
             font-weight: 700;
             line-height: 1.1;
             margin-bottom: 20px;
             letter-spacing: -1px;
+            text-align: center;
+            width: 100%;
         }
-        .hero-title .highlight {
+        .animated-title .highlight {
             color: #8b5cf6;
         }
+
         .hero-subtitle {
             font-size: 1.2rem;
             color: #888;
@@ -201,7 +175,6 @@
             border: 1px solid rgba(139, 92, 246, 0.1);
         }
 
-        /* === RANDOM QUOTE === */
         .quote-section {
             width: 100%;
             text-align: center;
@@ -212,52 +185,41 @@
         }
         .quote-section .quote {
             font-size: 1.2rem;
-            color: #ccc;
             font-weight: 300;
             letter-spacing: 0.5px;
             line-height: 1.5;
+            transition: color 0.3s ease;
         }
 
         @media (max-width: 768px) {
-            .header { padding: 15px 20px; }
             .app { padding: 30px 20px; }
             .hero { flex-direction: column; }
-            .hero-title { font-size: 2.5rem; }
+            .animated-title { font-size: 2.5rem; }
             .hero-right { width: 100%; }
         }
     </style>
 </head>
 <body>
 
-    <!-- LOADER -->
     <div id="loader">
         <img src="assets/loading.png" alt="Loading">
     </div>
 
-    <!-- ЗВЁЗДНЫЙ ФОН -->
     <canvas id="stars-canvas"></canvas>
 
-    <!-- CURSOR -->
     <div id="c-dot"></div>
     <div id="c-ring"></div>
 
-    <!-- HEADER -->
-    <header class="header">
-        <div class="logo">NEKT<span>4</span>R<span>.</span>INK <span class="version">v3.37</span></div>
-    </header>
-
-    <!-- MAIN CONTENT -->
     <main class="app" id="mainContent">
-        <!-- HERO -->
         <section class="hero">
             <div class="hero-left">
                 <div class="hero-tag">✦ добро пожаловать</div>
-                <h1 class="hero-title">
-                    Здесь начинается <span class="highlight">космос</span>
+                <h1 class="animated-title" id="animatedTitle">
+                    здесь начинается <span class="highlight">космос</span>
                 </h1>
-                <div class="hero-subtitle">Этот сайт — твой выбор. Каждый оттенок — это шаг к пониманию себя</div>
+                <div class="hero-subtitle">этот сайт — твой выбор. каждый оттенок — это шаг к пониманию себя</div>
                 <p class="hero-desc">
-                    Здесь нет правильных ответов. Есть только ты и твой выбор. Всё остальное — шум
+                    здесь нет правильных ответов. есть только ты и твой выбор. всё остальное — шум
                 </p>
             </div>
             <div class="hero-right">
@@ -265,33 +227,42 @@
             </div>
         </section>
 
-        <!-- RANDOM QUOTE -->
         <section class="quote-section">
             <div class="quote" id="randomQuote">—</div>
         </section>
     </main>
 
-    <!-- ФОНОВАЯ МУЗЫКА (ЛОКАЛЬНО) -->
     <audio id="bg-music" loop>
         <source src="assets/ambient.mp3" type="audio/mpeg">
     </audio>
 
     <script>
         (function() {
-            // === АНИМИРОВАННЫЙ TITLE ===
+            // === АНИМИРОВАННЫЙ TITLE (ВКЛАДКА) ===
             const titleEl = document.getElementById('dynamicTitle');
-            const symbols = '!?@&#%$^';
-            let frame = 0;
-
+            const titleSymbols = '!?@&#%$^';
             function animateTitle() {
                 let newText = '';
                 for (let i = 0; i < 7; i++) {
-                    newText += symbols[Math.floor(Math.random() * symbols.length)];
+                    newText += titleSymbols[Math.floor(Math.random() * titleSymbols.length)];
                 }
                 titleEl.textContent = newText;
                 setTimeout(animateTitle, 200);
             }
             animateTitle();
+
+            // === АНИМИРОВАННЫЙ ЗАГОЛОВОК (НА СТРАНИЦЕ) ===
+            const headerEl = document.getElementById('animatedTitle');
+            const headerSymbols = '!?@&#%$^';
+            function animateHeader() {
+                let newText = '';
+                for (let i = 0; i < 7; i++) {
+                    newText += headerSymbols[Math.floor(Math.random() * headerSymbols.length)];
+                }
+                headerEl.textContent = newText + ' <span class="highlight">космос</span>';
+                setTimeout(animateHeader, 200);
+            }
+            animateHeader();
 
             // === ЗВЁЗДНЫЙ ФОН ===
             const canvas = document.getElementById('stars-canvas');
@@ -376,9 +347,11 @@
                 el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
             });
 
-            // === LOADER ===
+            // === LOADER с рандомным временем ===
             const loader = document.getElementById('loader');
             const mainContent = document.getElementById('mainContent');
+
+            const loadTime = Math.random() * 2500 + 1500; // от 1.5 до 4 сек
 
             setTimeout(() => {
                 loader.classList.add('hidden');
@@ -386,43 +359,95 @@
                 setTimeout(() => {
                     loader.style.display = 'none';
                 }, 600);
-            }, 4000);
+            }, loadTime);
 
-            // === RANDOM QUOTE ===
+            // === 50 ЦИТАТ С ГРАДИЕНТОМ ===
             const quotes = [
                 'ты либо сгоришь, либо выйдешь из огня другим',
                 'никто не скажет тебе, что делать. ты решаешь сам',
                 'тишина здесь — это не пустота. это начало',
                 'иногда лучший способ понять себя — просто заткнуться и посмотреть',
                 'здесь нет правильных ответов. есть только ты и твой выбор',
-                'покажи, что ты есть. остальное — не твоя забота'
+                'покажи, что ты есть. остальное — не твоя забота',
+                'ты не потерялся в космосе. ты наконец-то нашёл своё место',
+                'не пытайся объяснить. просто почувствуй',
+                'вселенная не терпит пустоты. но ты — не пустота',
+                'ты — не статус. ты — причина, по которой этот сайт существует',
+                'не бойся темноты. иногда именно в ней рождаются самые яркие цвета',
+                'ты — не просто точка в бесконечности. ты — целая вселенная',
+                'каждый цвет внутри тебя — это не просто оттенок. это голос',
+                'космос начинается не за пределами земли. он начинается там, где ты позволяешь себе быть настоящим',
+                'ты либо выйдешь из огня другим, либо сгоришь',
+                'иногда лучший способ понять себя — просто заткнуться',
+                'не ищи ответы. ищи вопросы',
+                'ты — не ошибка. ты — эксперимент',
+                'тишина громче слов',
+                'не бойся быть собой. бойся быть никем',
+                'всё, что тебе нужно, уже внутри тебя',
+                'не жди, пока мир изменится. изменись сам',
+                'иногда единственный способ выжить — это перестать бояться',
+                'ты не один. даже когда кажется, что ты один',
+                'не позволяй прошлому определять твоё будущее',
+                'будь тем, кем ты хочешь быть, а не тем, кем тебя хотят видеть',
+                'каждый день — это новый шанс',
+                'не бойся ошибаться. бойся не пробовать',
+                'ты — не твои ошибки',
+                'всё начинается с выбора',
+                'выбирай себя',
+                'не жди идеального момента. создавай его',
+                'ты сильнее, чем думаешь',
+                'не сдавайся. ещё не всё потеряно',
+                'каждый шаг — это прогресс',
+                'ты — не твои мысли. ты — тот, кто их наблюдает',
+                'иногда тишина — лучший ответ',
+                'не бойся быть уязвимым. это делает тебя сильнее',
+                'ты — не твои страхи. ты — тот, кто их преодолевает',
+                'каждый конец — это новое начало',
+                'не сравнивай себя с другими. сравнивай себя с собой вчерашним',
+                'ты — не твои достижения. ты — твой путь',
+                'не жди, пока кто-то спасёт тебя. спаси себя сам',
+                'ты — не твои травмы. ты — твой опыт',
+                'не бойся быть собой. даже если это значит быть другим',
+                'ты — не твои сомнения. ты — твоя уверенность',
+                'каждый день — это возможность стать лучше',
+                'не бойся мечтать. бойся не мечтать',
+                'ты — не твои границы. ты — твой потенциал'
             ];
 
             const quoteEl = document.getElementById('randomQuote');
             const randomIndex = Math.floor(Math.random() * quotes.length);
+            const brightness = 100 - (randomIndex / quotes.length) * 100;
             quoteEl.textContent = quotes[randomIndex];
+            quoteEl.style.color = `rgb(${brightness}%, ${brightness}%, ${brightness}%)`;
 
-            // === ФОНОВАЯ МУЗЫКА (ЛОКАЛЬНО) ===
+            // === МУЗЫКА — ОБХОД БЛОКИРОВКИ ===
             const audio = document.getElementById('bg-music');
             let audioPlayed = false;
 
-            function playAudio() {
-                if (!audioPlayed) {
-                    audioPlayed = true;
-                    audio.play().catch(() => {
-                        // если браузер блокирует автозапуск, ничего страшного
-                    });
+            function unlockAndPlay() {
+                if (audioPlayed) return;
+                try {
+                    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    if (audioCtx.state === 'suspended') {
+                        audioCtx.resume().then(() => {
+                            audio.play().then(() => {
+                                audioPlayed = true;
+                            }).catch(() => {});
+                        });
+                    } else {
+                        audio.play().then(() => {
+                            audioPlayed = true;
+                        }).catch(() => {});
+                    }
+                } catch (e) {
+                    audio.play().catch(() => {});
                 }
             }
 
-            // пробуем запустить сразу при загрузке
-            playAudio();
+            setTimeout(unlockAndPlay, 500);
 
-            // если не сработало — запускаем по клику
-            document.addEventListener('click', playAudio, { once: true });
-
-            // также при наведении курсора (после загрузки)
-            document.addEventListener('mousemove', playAudio, { once: true });
+            document.addEventListener('click', unlockAndPlay, { once: true });
+            document.addEventListener('mousemove', unlockAndPlay, { once: true });
 
         })();
     </script>
