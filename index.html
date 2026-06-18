@@ -27,6 +27,20 @@
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
+            transition: background 0.5s ease;
+        }
+
+        /* светлый режим */
+        body.light-mode {
+            background: #f0f0f0;
+            color: #0a0a0a;
+        }
+        body.light-mode .hero-subtitle,
+        body.light-mode .hero-desc {
+            color: #555;
+        }
+        body.light-mode .quote-section {
+            border-color: rgba(0,0,0,0.1);
         }
 
         #stars-canvas {
@@ -37,6 +51,10 @@
             height: 100%;
             z-index: 0;
             pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        body.light-mode #stars-canvas {
+            opacity: 0.3;
         }
 
         #c-dot {
@@ -104,6 +122,7 @@
             position: relative;
             z-index: 5;
             display: none;
+            transition: color 0.5s ease;
         }
         .app.visible {
             display: flex;
@@ -192,6 +211,52 @@
             border-top: 1px solid rgba(255,255,255,0.06);
             border-bottom: 1px solid rgba(255,255,255,0.06);
             margin-bottom: 40px;
+            min-height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .quote-section .quote {
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            line-height: 1.5;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            position: relative;
+        }
+        .quote-section .quote:hover {
+            color: #8b5cf6;
+            text-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+        }
+
+        /* переключатель режимов */
+        .mode-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+            background: rgba(20,20,30,0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: 0.3s;
+            color: white;
+        }
+        .mode-toggle:hover {
+            transform: scale(1.1);
+            border-color: #8b5cf6;
+        }
+        body.light-mode .mode-toggle {
+            background: rgba(255,255,255,0.8);
+            border-color: rgba(0,0,0,0.1);
+            color: #0a0a0a;
         }
 
         @media (max-width: 768px) {
@@ -199,6 +264,7 @@
             .hero { flex-direction: column; }
             .animated-title { font-size: 2.5rem; }
             .hero-right { width: 100%; }
+            .mode-toggle { bottom: 20px; right: 20px; width: 44px; height: 44px; font-size: 1.2rem; }
         }
     </style>
 </head>
@@ -228,12 +294,17 @@
             </div>
         </section>
 
-        <section class="quote-section" id="quoteContainer"></section>
+        <section class="quote-section" id="quoteContainer">
+            <div class="quote" id="currentQuote"></div>
+        </section>
     </main>
 
     <audio id="bg-music" loop>
         <source src="assets/ambient.mp3" type="audio/mpeg">
     </audio>
+
+    <!-- Переключатель режимов -->
+    <div class="mode-toggle" id="modeToggle">🌙</div>
 
     <script>
         (function() {
@@ -354,7 +425,7 @@
                 }, 600);
             }, loadTime);
 
-            // == звук при загрузке (7) ==
+            // звук при загрузке
             function playBootSound() {
                 try {
                     const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -426,18 +497,47 @@
                 'ты — не твои границы. ты — твой потенциал'
             ];
 
-            const quoteContainer = document.getElementById('quoteContainer');
-            quoteContainer.innerHTML = '';
+            const quoteEl = document.getElementById('currentQuote');
+            let currentIndex = Math.floor(Math.random() * quotes.length);
 
-            quotes.forEach((q, index) => {
-                const p = document.createElement('p');
-                p.textContent = q;
-                const brightness = 100 - (index / quotes.length) * 80;
-                p.style.color = `rgb(${brightness}%, ${brightness}%, ${brightness}%)`;
-                p.style.fontSize = '1rem';
-                p.style.margin = '12px 0';
-                p.style.opacity = '1';
-                quoteContainer.appendChild(p);
+            function showQuote(index) {
+                quoteEl.style.opacity = 0;
+                quoteEl.style.transform = 'translateY(10px)';
+                setTimeout(() => {
+                    quoteEl.textContent = quotes[index];
+                    quoteEl.style.opacity = 1;
+                    quoteEl.style.transform = 'translateY(0)';
+                }, 400);
+            }
+
+            showQuote(currentIndex);
+            setInterval(() => {
+                currentIndex = (currentIndex + 1) % quotes.length;
+                showQuote(currentIndex);
+            }, 6000);
+
+            // === глитч на картинке (3) ===
+            function glitchImage() {
+                const img = document.querySelector('.hero-image');
+                if (!img) return;
+                img.style.filter = 'hue-rotate(60deg) brightness(1.2) contrast(1.5)';
+                img.style.transform = 'translate(2px, -2px) scale(1.02)';
+                setTimeout(() => {
+                    img.style.filter = '';
+                    img.style.transform = '';
+                }, 150);
+            }
+
+            setInterval(glitchImage, 15000);
+
+            // === переключатель режимов (10) ===
+            const toggle = document.getElementById('modeToggle');
+            let isLightMode = false;
+
+            toggle.addEventListener('click', () => {
+                isLightMode = !isLightMode;
+                document.body.classList.toggle('light-mode');
+                toggle.textContent = isLightMode ? '☀️' : '🌙';
             });
 
             const audio = document.getElementById('bg-music');
